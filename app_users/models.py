@@ -1,4 +1,4 @@
-from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
+from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, Group, Permission
 from django.db import models
 
 from django.contrib.auth.models import BaseUserManager
@@ -52,6 +52,21 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     USERNAME_FIELD = 'email'  # Usa 'username' si prefieres autenticación por nombre de usuario
     REQUIRED_FIELDS = ['username', 'user_type']
+
+    groups = models.ManyToManyField(
+        Group,
+        related_name='custom_user_set',  # Add this line
+        blank=True,
+        help_text='The groups this user belongs to.',
+        related_query_name='user',
+    )
+    user_permissions = models.ManyToManyField(
+        Permission,
+        related_name='custom_user_permissions_set',  # Add this line
+        blank=True,
+        help_text='Specific permissions for this user.',
+        related_query_name='user',
+    )
 
     def __str__(self):
         return f"{self.username} ({self.get_user_type_display()})"

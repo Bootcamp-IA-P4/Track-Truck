@@ -1,0 +1,140 @@
+@import url('colors.css');
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+    text-align: center;
+}
+
+header {
+    background-color: var(--color-10-900);
+    color: white;
+    padding: 20px;
+    font-size: 18px;
+}
+
+.company_dashboard {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin: 20px auto;
+    max-width: 1200px;
+    height: auto;
+    gap: 20px;
+    padding: 10px;
+}
+
+.company_data {
+    background: white;
+    padding: 20px;
+    text-align: left;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    flex: 1;
+    max-width: 200px;
+}
+
+.company_actions {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+
+.company_actions_buttons {
+    display: flex;
+    gap: 15px;
+    height: 40px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--color-7-600);
+    width: 100%;
+}
+
+.btn {
+    text-decoration: none;
+    padding: 12px 25px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 5px;
+    display: inline-block;
+    text-align: center;
+    transition: background-color 0.3s, transform 0.3s ease;
+}
+
+.btn-create {
+    background-color: var(--color-6-500);
+    color: #fff;
+}
+
+.btn-create:hover {
+    background-color: var(--color-5-400);
+    transform: scale(1.02);
+}
+
+.btn-view {
+    background-color: var(--color-4-300);
+    color: #fff;
+}
+
+.btn-view:hover {
+    background-color: var(--color-3-200);
+    transform: scale(1.02);
+}
+
+.btn:active {
+    transform: scale(0.98);
+}
+
+button {
+    background-color: var(--color-10-900);
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 15px;
+    font-size: 16px;
+}
+
+button:hover {
+    background-color: var( --color-9-800);
+}
+
+footer {
+    margin-top: 30px;
+    padding: 10px;
+    background-color: #333;
+    color: white;
+}
+
+@media (max-width: 768px) {
+    header {
+        font-size: 5px;
+        padding: 15px;
+    }
+    .company_dashboard {
+        grid-template-columns: 1fr;
+        min-height: 500px;
+    }
+
+    .company_actions_buttons {
+        width: 100%;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    header {
+        font-size: 16px;
+        padding: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    button {
+        font-size: 14px;
+        padding: 8px 12px;
+    }
+}

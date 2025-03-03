@@ -1,0 +1,129 @@
+@import url('colors.css');
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+    text-align: center;
+}
+
+header {
+    background-color: var(--color-10-900);
+    color: white;
+    padding: 20px;
+    font-size: 18px;
+}
+
+form {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 600px;
+    margin: 20px auto;
+    text-align: left;
+    box-sizing: border-box; /* Asegura que el padding no cause desbordamiento */
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+input[type="text"], 
+input[type="email"] {
+    width: 100%; /* Hace que el campo ocupe todo el ancho disponible */
+    padding: 12px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+    box-sizing: border-box; /* Asegura que los inputs no se desborden */
+}
+
+button {
+    background-color: var(--color-10-900);
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    width: 100%;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: var(--color-9-800);
+}
+
+a.cancel-btn {
+    display: block;
+    margin-top: 15px;
+    text-align: center;
+    text-decoration: none;
+    color: var(--color-10-900);
+    font-weight: bold;
+}
+
+a.cancel-btn:hover {
+    color: var(--color-7-600);
+}
+
+footer {
+    margin-top: 30px;
+    padding: 10px;
+    background-color: #333;
+    color: white;
+}
+
+
+/* Media Queries for Responsiveness */
+@media (max-width: 768px) {
+    form {
+        padding: 15px;
+    }
+
+    label {
+        font-size: 14px;
+    }
+
+    input[type="text"], 
+    input[type="email"] {
+        font-size: 14px;
+    }
+
+    button {
+        padding: 12px 20px;
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    header {
+        font-size: 16px;
+        padding: 10px;
+    }
+
+    form {
+        max-width: 100%;
+        padding: 10px;
+    }
+
+    input[type="text"], 
+    input[type="email"] {
+        font-size: 14px;
+    }
+
+    button {
+        padding: 12px 18px;
+        font-size: 14px;
+    }
+}

@@ -44,7 +44,8 @@ INSTALLED_APPS = [
     'app_users',
     'app_companies',
     'app_drivers',
-    #'app_shipments',
+    'app_shipments',
+    
 ]
 
 MIDDLEWARE = [
@@ -110,6 +111,11 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+#Necesario para que django reconozca la clase User como usuario autenticable
+AUTH_USER_MODEL = 'app_users.User'
+#Redirección al login
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/login/'
 
 
 # Internationalization

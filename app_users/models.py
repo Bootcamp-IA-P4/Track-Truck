@@ -33,6 +33,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         db_table = 'users'
     COMPANY = 'company'
     DRIVER = 'driver'
+    ADMIN = 'admin'
 
     USER_TYPE_CHOICES = [
         (COMPANY, 'Company'),
@@ -69,4 +70,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     )
 
     def __str__(self):
+        return f"{self.username} ({self.get_user_type_display()})"
+
         return f"{self.username} ({self.get_user_type_display()})"

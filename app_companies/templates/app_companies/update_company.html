@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update your data</title>
+
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'app_companies/css/update.css' %}">
+</head>
+<body>
+
+    <header>
+        <h1>Update your Company data</h1>
+    </header>
+
+    <main>
+        {% if company %}
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="name">Company name:</label>
+                <input type="text" name="name" value="{{ company.name }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" name="email" value="{{ company.email }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="phone">Telephone:</label>
+                <input type="text" name="phone" value="{{ company.phone }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="address">Adress:</label>
+                <input type="text" name="address" value="{{ company.address }}" required>
+            </div>
+
+            <button type="submit">Save</button>
+        </form>
+
+        <a href="{% url 'company_dashboard' company.id %}" class="cancel-btn">Cancel</a>
+
+        {% else %}
+            <p>Oops, we couldn't find this company...</p>
+        {% endif %}
+    </main>
+
+    <footer>
+        <p>&copy; 2025 TRACK TRUCK</p>
+    </footer>
+
+</body>
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ company.name }}'s Dashboard</title>
+
+    {% load static %}  <!-- Cargar archivos estáticos -->
+    <link rel="stylesheet" href="{% static 'app_companies/css/dashboard_styles.css' %}?v=3">
+</head>
+<body>
+
+    <header>
+        <h1>{{ company.name }}'s Dashboard</h1>
+    </header>
+
+    <main>
+        {% if company %}
+        <div class="company_dashboard">
+            <div class="company_data">
+                <h3>Welcome, {{ company.name }}!</h3>
+                <p><strong>Name:</strong> {{ company.name }}</p>
+                <p><strong>Email:</strong> {{ company.email }}</p>
+                <p><strong>Phone:</strong> {{ company.phone }}</p>
+                <p><strong>Address:</strong> {{ company.address|default:"No disponible" }}</p>
+
+                <a href="{% url 'update_company' company.id %}">
+                    <button>Update</button>
+                </a>
+            </div>
+
+            <div class="company_actions">
+                <div class="company_actions_buttons">
+                    <a href="{% url 'update_company' company.id %}" class="btn btn-create">Create Shippment</a>
+                    <a href="{% url 'update_company' company.id %}" class="btn btn-view">View Shippments</a>
+                </div>
+            </div>
+        </div>
+        {% else %}
+            <p>Oops, we couldn't find this company...</p>
+        {% endif %}
+    </main>
+
+    <footer>
+        <p>&copy; 2025 TRACK TRUCK</p>
+    </footer>
+
+</body>
+</html>

@@ -38,6 +38,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     USER_TYPE_CHOICES = [
         (COMPANY, 'Company'),
         (DRIVER, 'Driver'),
+        (ADMIN, 'Admin')
     ]
 
     username = models.CharField(max_length=150, unique=True)
@@ -72,4 +73,3 @@ class User(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return f"{self.username} ({self.get_user_type_display()})"
 
-        return f"{self.username} ({self.get_user_type_display()})"

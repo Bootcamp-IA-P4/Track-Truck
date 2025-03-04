@@ -41,9 +41,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'app_companies',
-    'app_users',
     'rest_framework',
+    'app_users',
+    'app_companies',
+    'app_drivers',
+    'app_shipments',
 ]
 
 MIDDLEWARE = [
@@ -61,7 +63,7 @@ ROOT_URLCONF = 'project_trucks.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, "project_trucks/templates")],  # 🔸 Ruta de templates,
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -109,6 +111,11 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+#Necesario para que django reconozca la clase User como usuario autenticable
+AUTH_USER_MODEL = 'app_users.User'
+#Redirección al login
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/login/'
 
 
 # Internationalization

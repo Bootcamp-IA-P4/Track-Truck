@@ -41,9 +41,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'app_companies',
-    'app_users',
     'rest_framework',
+    'app_users',
+    'app_companies',
+    'app_drivers',
     'app_shipments',
     
 ]
@@ -63,7 +64,7 @@ ROOT_URLCONF = 'project_trucks.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, "project_trucks/templates")],  # 🔸 Ruta de templates,
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

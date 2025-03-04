@@ -1,13 +1,15 @@
 from django.db import models
-from app_users.models import User
+#from app_users.models import User
+from django.contrib.auth.models import User
 
 # Create your models here.
 class Company(models.Model):
     name = models.CharField(max_length=100)
     email = models.EmailField()
     phone = models.CharField(max_length=15)
-    address = models.CharField(max_length=100,null=True)
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE, related_name='companies', db_column='user_id')
+    address = models.CharField(max_length=100,null=True,blank=True)
+    #user_id = models.ForeignKey(User, on_delete=models.CASCADE, related_name='companies', db_column='user_id')
+    user_id = models.OneToOneField(User, on_delete=models.CASCADE, related_name='companies', db_column='user_id')
 
     class Meta:
         db_table = 'companies'

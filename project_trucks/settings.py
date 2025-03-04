@@ -112,7 +112,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 #Necesario para que django reconozca la clase User como usuario autenticable
-AUTH_USER_MODEL = 'app_users.User'
+#AUTH_USER_MODEL = 'app_users.User'
 #Redirección al login
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/login/'
@@ -133,12 +133,14 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = 'static/'
-
-# Default primary key field type
-# https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
+STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),
+    os.path.join(BASE_DIR, 'static'),  # Asegura que esta carpeta exista
 ]
+
+# Para producción (solo si usas collectstatic)
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

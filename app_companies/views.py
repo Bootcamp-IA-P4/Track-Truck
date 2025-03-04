@@ -56,17 +56,34 @@ def companyDetail(request, id):
 # VISTAS QUE LLAMAN A LA API Y DEVUELVEN HTMLS
 import requests
 from django.shortcuts import redirect, get_object_or_404
+from app_companies.models import Company
+
 
 def company_dashboard(request, id):
-    api_url = f"http://127.0.0.1:8000/companies/{id}/detail/"  # URL de la API
-    response = requests.get(api_url)
+    company = get_object_or_404(Company, id=id)
+    
+    # Llamada a la API para obtener los envíos de la empresa
+    shipments_url = f"http://127.0.0.1:8000/shipments/{id}/co-shipments/"
+    response = requests.get(shipments_url)
 
+    shipments = []
     if response.status_code == 200:
-        company = response.json()
-    else:
-        company = None  # si la API falla, devolvemos None
+        shipments = response.json()  # Convertir la respuesta JSON en una lista de diccionarios
 
-    return render(request, 'app_companies/dashboard.html', {'company': company})
+    # Obtener el estado de visibilidad desde la sesión, por defecto es 'ocultar'
+    show_shipments = request.session.get(f"show_shipments_{id}", False)
+
+    # Si el usuario hace clic en el enlace, cambiar el estado de visibilidad
+    if 'toggle_shipments' in request.GET:
+        show_shipments = not show_shipments
+        request.session[f"show_shipments_{id}"] = show_shipments
+
+    return render(request, 'app_companies/dashboard.html', {
+        'company': company,
+        'shipments': shipments,
+        'show_shipments': show_shipments
+    })
+
 
 def update_company(request, id):
     api_url = f"http://127.0.0.1:8000/companies/{id}/detail/"

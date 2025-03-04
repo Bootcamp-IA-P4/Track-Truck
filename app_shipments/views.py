@@ -24,6 +24,44 @@ def shipmentList(request):
     except:
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
+@api_view(['GET'])
+def companyShipments(request, id):
+    try:
+        # Filtrar los envíos por el company_id que coincide con el parámetro 'id'
+        shipments = Shipment.objects.filter(company_id=id)
+        
+        # Verificar si se encontraron envíos
+        if not shipments:
+            return Response({"detail": "No shipments found for this company."}, status=status.HTTP_404_NOT_FOUND)
+        
+        # Serializar los datos de los envíos encontrados
+        serializer = ShipmentSerializer(shipments, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    except Exception as e:
+        # Capturar cualquier error que ocurra y devolver un mensaje de error
+        return Response({"detail": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+def driverShipments(request, id):
+    try:
+        # Filtrar los envíos por el company_id que coincide con el parámetro 'id'
+        shipments = Shipment.objects.filter(driver_id=id)
+        
+        # Verificar si se encontraron envíos
+        if not shipments:
+            return Response({"detail": "No shipments found for this company."}, status=status.HTTP_404_NOT_FOUND)
+        
+        # Serializar los datos de los envíos encontrados
+        serializer = ShipmentSerializer(shipments, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    except Exception as e:
+        # Capturar cualquier error que ocurra y devolver un mensaje de error
+        return Response({"detail": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+
 @api_view(['PUT'])
 def shipmentUpdate(request):
     serializer = ShipmentSerializer(Shipment, data=request.data)

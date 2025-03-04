@@ -4,8 +4,9 @@ from . import views
 urlpatterns = [
 
     #path('', views.shipmentList),
-    path('<int:id>/companyshipments/', views.companyShipments),
-    path('<int:id>/drivershipments/', views.driverShipments),
+    path('<int:id>/co-shipments/', views.companyShipments),
+    path('shipments-add/', views.shipmentCreate),
+    path('<int:id>/dr-shipments/', views.driverShipments),
     
 
 

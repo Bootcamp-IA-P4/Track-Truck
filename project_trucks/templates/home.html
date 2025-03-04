@@ -1,14 +1,34 @@
 <!DOCTYPE html>
-<html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Bienvenido a Track Truck</title>
-  </head>
-  <body>
-    <h1>Bienvenido a Track Truck</h1>
-    <p>Por favor, selecciona una opción:</p>
-    <a href="#"><button>Iniciar sesión</button></a> 
-    <a href="#"><button>Registrarse</button></a> 
-  </body>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign in</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/home.css' %}?v=3">
+    
+</head>
+<body>
+    <section class="form-login">
+        <h5>Account</h5>
+        <input class="controls" type="text" name="email" value="" placeholder="Email">
+        <input class="controls" type="password" name="Password" value="" placeholder="Password">
+        <form>
+            <label for="rol">Select an option:</label>
+            <select id="rol" name="rol">
+                <optgroup label="--Select--">
+                    <option value="Companies">Companies</option>
+                    <option value="Drivers">Drivers</option>
+                </optgroup>
+            </select>
+
+            <input class="buttons" type="submit" value="Login">
+        </form>
+
+
+        <p><a href="#">¿Forgot your Password?</a></p>
+        <p><a href="#">Register</a></p>
+  
+      </section>  
+</body>
 </html>

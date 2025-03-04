@@ -6,7 +6,7 @@ class Company(models.Model):
     name = models.CharField(max_length=100)
     email = models.EmailField()
     phone = models.CharField(max_length=15)
-    address = models.CharField(max_length=100,null=True)
+    address = models.CharField(max_length=100,null=True,blank=True)
     user_id = models.ForeignKey(User, on_delete=models.CASCADE, related_name='companies', db_column='user_id')
 
     class Meta:

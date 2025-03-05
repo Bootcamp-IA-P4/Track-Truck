@@ -42,13 +42,11 @@ def driver_detail(request, id):
         return Response({"message": "Conductor eliminado correctamente"}, status=status.HTTP_204_NO_CONTENT)
 
 
-
 # VISTAS QUE LLAMAN A LA API Y DEVUELVEN HTMLS
 import requests
 from django.shortcuts import redirect, get_object_or_404
-from app_companies.models import Company
 from datetime import datetime
-
+import json
 
 def driver_dashboard(request, id):
     driver = get_object_or_404(Driver, id=id)
@@ -70,10 +68,9 @@ def driver_dashboard(request, id):
         'shipments': shipments
     })
 
-
-
 def update_driver(request, id):
-    api_url = f"http://127.0.0.1:8000/driver/{id}/detail/"
+    # URL para obtener los datos del conductor
+    api_url = f"http://127.0.0.1:8000/drivers/{id}/detail/"
     response = requests.get(api_url)
 
     if response.status_code == 200:
@@ -82,23 +79,27 @@ def update_driver(request, id):
         return render(request, "app_drivers/update_driver.html", {"error": "Error al obtener datos."})
 
     if request.method == "POST":
+        # recogemos los datos del formulario
         data = {
             "name": request.POST["name"],
+            "truck_plate": request.POST["truck_plate"],
             "phone": request.POST["phone"],
-            "address": request.POST["address"],
-            "user_id": driver["user_id"],
+            "user": driver["user"]
         }
 
-        # hacemos la petición PUT a la API para actualizar los datos
-        update_url = f"http://127.0.0.1:8000/drivers/{id}/update/"
-        update_response = requests.put(update_url, data=data)
+        # convertimos el diccionario en JSON
+        json_data = json.dumps(data)
+        headers = {'Content-Type': 'application/json'}
+
+        # hacemos la solicitud PUT con los datos en formato JSON
+        update_response = requests.put(api_url, data=json_data, headers=headers)
 
         if update_response.status_code == 200:
-            return redirect(f"/drivers/{id}/driver_dashboard/")  # Redirige de vuelta al dashboard
+            return redirect(f"/drivers/{id}/driver_dashboard/")
         else:
             return render(request, "app_drivers/update_driver.html", {
                 "driver": driver,
-                "error": "Error al actualizar la empresa. Verifica los datos."
+                "error": "Error al actualizar el conductor. Verifica los datos."
             })
 
     return render(request, "app_drivers/update_driver.html", {"driver": driver})

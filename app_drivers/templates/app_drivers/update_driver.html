@@ -17,6 +17,8 @@
     <main>
         {% if driver %}
         <form method="post">
+            <input type="hidden" name="_method" value="PUT"> <!-- Este campo simula el método PUT -->
+
             {% csrf_token %}
             <div class="form-group">
                 <label for="name">Name:</label>
@@ -24,13 +26,13 @@
             </div>
 
             <div class="form-group">
-                <label for="truck_plate">Truck Plate:</label>
-                <input type="text" name="truck_plate" value="{{ driver.truck_plate }}" required>
+                <label for="phone">Phone:</label>
+                <input type="text" name="phone" value="{{ driver.phone }}" required>
             </div>
 
             <div class="form-group">
-                <label for="phone">Phone:</label>
-                <input type="text" name="phone" value="{{ driver.phone }}" required>
+                <label for="truck_plate">Truck Plate:</label>
+                <input type="text" name="truck_plate" value="{{ driver.truck_plate }}" required>
             </div>
 
             <button type="submit">Save</button>

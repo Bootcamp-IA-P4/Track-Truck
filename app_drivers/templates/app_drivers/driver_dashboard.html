@@ -23,7 +23,6 @@
                     <p><strong>Name:</strong> {{ driver.name }}</p>
                     <p><strong>Phone:</strong> {{ driver.phone }}</p>
                     <p><strong>Plate:</strong> {{ driver.truck_plate}}</p>
-                    <p><strong>Address:</strong> {{ driver.address|default:"No disponible" }}</p>
 
                     <a href="{% url 'update_driver' driver.id %}">
                         <button>Update</button>

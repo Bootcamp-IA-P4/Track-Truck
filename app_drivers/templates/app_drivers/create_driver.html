@@ -1,0 +1,9 @@
+<form method="post">
+    {% csrf_token %}
+    <input type="hidden" name="user" value="{{ user_id }}">
+    <input type="text" name="name" placeholder="Nombre del driver" required>
+    <input type="text" name="truck_plate" placeholder="Matricula del camion" required>
+    <input type="tel" name="phone" placeholder="Teléfono del driver" required>
+    <!-- Añade otros campos necesarios -->
+    <button type="submit">Crear Driver</button>
+</form>

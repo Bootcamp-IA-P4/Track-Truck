@@ -22,9 +22,11 @@ urlpatterns = [
     path('', home, name="home"),
     path('admin/', admin.site.urls),
     path('users/', include('app_users.urls')),
-    path('companies/', include('app_companies.urls')),
-    path('drivers/', include('app_drivers.urls')),
+    path('companies/', include('app_companies.urls', namespace='companies')),
+    path('drivers/', include('app_drivers.urls', namespace='drivers')),
     path('shipments/',include('app_shipments.urls'))
+
+
 
     
 ]

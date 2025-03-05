@@ -13,13 +13,30 @@ def getAllCompanies(request):
     serializer = CompanySerializer(companies, many=True)
     return Response(serializer.data)
 
+# @api_view(['POST'])
+# def createCompany(request):
+#     serializer = CompanySerializer(data=request.data)
+#     if serializer.is_valid():
+#         serializer.save()
+#         return Response(serializer.data, status=status.HTTP_201_CREATED)
+#     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 @api_view(['POST'])
 def createCompany(request):
-    serializer = CompanySerializer(data=request.data)
+    data = request.data.copy()
+    user_id = data.pop('user_id', None)
+    
+    if user_id is None:
+        return Response({"error": "user_id is required"}, status=status.HTTP_400_BAD_REQUEST)
+    
+    data['user_id'] = user_id
+    serializer = CompanySerializer(data=data)
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
 
 @api_view(['PUT','GET','DELETE', 'PATCH'])
 def companyDetail(request, id):
@@ -49,6 +66,25 @@ def companyDetail(request, id):
     elif request.method == 'DELETE':
         company.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+    
+
+def create_company_form(request, user_id):
+    if request.method == 'POST':
+        company_data = {
+            'user_id': user_id,
+            'name': request.POST.get('name'),
+            'email': request.POST.get('email'),
+            'phone': request.POST.get('phone'),
+        }
+        response = requests.post('http://localhost:8000/companies/create/', json=company_data)
+        if response.status_code == 201:
+            #return redirect('company_dashboard') ### Cambiar a la vista de detalle de la compañía !!!
+            return redirect('home') ### Cambiar a la vista de detalle de la compañía !!!
+        else:
+            return render(request, 'create_company.html', {'error': 'Error al crear la compañía', 'user_id': user_id})
+    else:
+        return render(request, 'create_company.html', {'user_id': user_id})
+
     
 
 
@@ -99,3 +135,47 @@ def update_company(request, id):
             })
 
     return render(request, "app_companies/update_company.html", {"company": company})
+
+
+
+# import requests
+
+# def signin(request):
+#     if request.method == 'POST':
+#         form = CustomUserCreationForm(request.POST)
+#         if form.is_valid():
+#             user = form.save()
+#             auth_login(request, user)
+
+#             if user.user_type == 'company':
+#                 # Llamar a la API para crear la compañía
+#                 api_url = "http://127.0.0.1:8000/companies/create/"
+#                 data = {
+#                     'name': request.POST.get('company_name', ''),  # Nombre de la compañía desde el formulario
+#                     'email': user.email,  # Email del usuario registrado
+#                     'phone': request.POST.get('phone', ''),  # Teléfono desde el formulario
+#                     'address': request.POST.get('address', ''),  # Dirección desde el formulario
+#                     'user_id': user.id,  # ID del usuario recién creado
+#                 }
+#                 response = requests.post(api_url, data=data)
+
+#                 if response.status_code == 201:
+#                     return redirect('company_dashboard', id=response.json()['id'])
+#                 else:
+#                     # Manejar errores en caso de que la API falle
+#                     return render(request, 'users/signin.html', {
+#                         'form': form,
+#                         'error': 'Error al crear la compañía. Por favor, inténtalo de nuevo.',
+#                     })
+
+#             elif user.user_type == 'driver':
+#                 # Redirigir a otra vista si es un conductor
+#                 return redirect('create_driver', user_id=user.id)
+
+#             else:
+#                 return redirect('home')  # Redirigir al home por defecto
+
+#     else:
+#         form = CustomUserCreationForm()
+
+#     return render(request, 'users/signin.html', {'form': form})

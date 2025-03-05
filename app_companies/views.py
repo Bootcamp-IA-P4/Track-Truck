@@ -57,32 +57,29 @@ def companyDetail(request, id):
 import requests
 from django.shortcuts import redirect, get_object_or_404
 from app_companies.models import Company
+from datetime import datetime
 
 
 def company_dashboard(request, id):
     company = get_object_or_404(Company, id=id)
     
-    # Llamada a la API para obtener los envíos de la empresa
+    # llamamos a la API para obtener los envíos de la empresa
     shipments_url = f"http://127.0.0.1:8000/shipments/{id}/co-shipments/"
     response = requests.get(shipments_url)
 
     shipments = []
     if response.status_code == 200:
-        shipments = response.json()  # Convertir la respuesta JSON en una lista de diccionarios
+        shipments = response.json()  # convertimos la respuesta JSON en una lista de diccionarios
 
-    # Obtener el estado de visibilidad desde la sesión, por defecto es 'ocultar'
-    show_shipments = request.session.get(f"show_shipments_{id}", False)
-
-    # Si el usuario hace clic en el enlace, cambiar el estado de visibilidad
-    if 'toggle_shipments' in request.GET:
-        show_shipments = not show_shipments
-        request.session[f"show_shipments_{id}"] = show_shipments
-
+        # convertimos y formatear las fechas
+        for shipment in shipments:
+            shipment["created_at"] = datetime.fromisoformat(shipment["created_at"].replace("Z", "")).strftime("%Y-%m-%d %H:%M")
+            shipment["finished_at"] = datetime.fromisoformat(shipment["finished_at"].replace("Z", "")).strftime("%Y-%m-%d %H:%M")
     return render(request, 'app_companies/dashboard.html', {
         'company': company,
-        'shipments': shipments,
-        'show_shipments': show_shipments
+        'shipments': shipments
     })
+
 
 
 def update_company(request, id):

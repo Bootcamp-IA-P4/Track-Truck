@@ -4,7 +4,7 @@ from django.db import models
 class Shipment(models.Model):
     id = models.IntegerField(unique=True,null=False,primary_key=True)
     company_id = models.IntegerField(unique=True,null=False)
-    driver_id = models.IntegerField(unique=True,null=False)
+    driver_id = models.IntegerField(unique=True)
     description = models.TextField()
     origin = models.TextField()
     destination = models.TextField()

@@ -43,6 +43,7 @@
                                     <th>Description</th>
                                     <th>Origin</th>
                                     <th>Destination</th>
+                                    <th>Company</th>
                                     <th>Created At</th>
                                     <th>Finished At</th>
                                 </tr>
@@ -54,6 +55,11 @@
                                     <td>{{ shipment.description }}</td>
                                     <td>{{ shipment.origin }}</td>
                                     <td>{{ shipment.destination }}</td>
+                                    <td class="td-color">
+                                        <a href="{% url 'company_dashboard' shipment.company_id %}" class="driver-link">
+                                            {{ shipment.company_id }}
+                                        </a>
+                                    </td>
                                     <td>{{ shipment.created_at }}</td>
                                     <td>{{ shipment.finished_at }}</td>
                                 </tr>

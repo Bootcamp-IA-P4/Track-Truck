@@ -57,7 +57,7 @@
                                     <td>{{ shipment.origin }}</td>
                                     <td>{{ shipment.destination }}</td>
                                     <td>{{ shipment.created_at }}</td>
-                                    <td>
+                                    <td class="td-color">
                                         <a href="{% url 'driver_dashboard' shipment.driver_id %}" class="driver-link">
                                             {{ shipment.driver_id }}
                                         </a>
@@ -77,6 +77,9 @@
 
             <div class="cp-create-shipment">
                 <h3>Create shipment</h3>
+                <div class="cp-create-shipments">
+                    
+                </div>
             </div>
         </div>
         {% else %}

@@ -1,5 +1,6 @@
 from django.urls import path
 from .views import get_all_drivers, create_driver, driver_detail
+from .import views
 
 urlpatterns = [
     path("", get_all_drivers, name="get_all_drivers"),
@@ -7,4 +8,9 @@ urlpatterns = [
     path("<int:id>/detail/", driver_detail, name="driver_detail"),
     path ("<int:id>/update/", driver_detail, name="driver_detail"),
     path ("<int:id>/delete/", driver_detail, name="driver_detail"),
+
+    # VISTAS HTML
+    path('<int:id>/driver_dashboard/', views.driver_dashboard, name='driver_dashboard'),
+    path('<int:id>/driver_edit/', views.update_driver, name='update_driver'),
+
 ]

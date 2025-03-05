@@ -27,3 +27,6 @@ def login(request):
 def logout(request):
     logout(request)
     return redirect('login')
+
+def forgot_password(request):
+    return render(request, 'forgot_password.html')

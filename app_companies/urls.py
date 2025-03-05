@@ -4,7 +4,7 @@ from .import views
 urlpatterns = [     
     # API REST
     path('', views.getAllCompanies),
-    path('create/', views.createCompany),
+    path('create/', views.createCompany, name='create_company'),
     path('<int:id>/detail/', views.companyDetail),
     path('<int:id>/update/', views.companyDetail),
     path('<int:id>/delete/', views.companyDetail),

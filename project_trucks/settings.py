@@ -112,7 +112,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 #Necesario para que django reconozca la clase User como usuario autenticable
-#AUTH_USER_MODEL = 'app_users.User'
+AUTH_USER_MODEL = 'app_users.User'
 #Redirección al login
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/login/'

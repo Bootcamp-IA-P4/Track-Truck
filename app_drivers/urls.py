@@ -10,6 +10,6 @@ urlpatterns = [
     path("<int:id>/delete/", driver_detail, name="driver_detail"),
 
     # VISTAS HTML
-    path('<int:id>/driver_dashboard/', views.driver_dashboard, name='driver_dashboard'),
-    path('<int:id>/update_driver/', views.update_driver, name='update_driver'),
+    path('<int:id>/dr-dashboard/', views.driver_dashboard, name='driver_dashboard'),
+    path('<int:id>/dr-update/', views.update_driver, name='update_driver'),
 ]

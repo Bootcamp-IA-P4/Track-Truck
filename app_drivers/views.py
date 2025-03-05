@@ -63,7 +63,7 @@ def driver_dashboard(request, id):
         for shipment in shipments:
             shipment["created_at"] = datetime.fromisoformat(shipment["created_at"].replace("Z", "")).strftime("%Y-%m-%d %H:%M")
             shipment["finished_at"] = datetime.fromisoformat(shipment["finished_at"].replace("Z", "")).strftime("%Y-%m-%d %H:%M")
-    return render(request, 'app_drivers/driver_dashboard.html', {
+    return render(request, 'app_drivers/dr-dashboard.html', {
         'driver': driver,
         'shipments': shipments
     })
@@ -76,7 +76,7 @@ def update_driver(request, id):
     if response.status_code == 200:
         driver = response.json()
     else:
-        return render(request, "app_drivers/update_driver.html", {"error": "Error al obtener datos."})
+        return render(request, "app_drivers/dr-update.html", {"error": "Error al obtener datos."})
 
     if request.method == "POST":
         # recogemos los datos del formulario
@@ -95,11 +95,11 @@ def update_driver(request, id):
         update_response = requests.put(api_url, data=json_data, headers=headers)
 
         if update_response.status_code == 200:
-            return redirect(f"/drivers/{id}/driver_dashboard/")
+            return redirect(f"/drivers/{id}/dr-dashboard/")
         else:
-            return render(request, "app_drivers/update_driver.html", {
+            return render(request, "app_drivers/dr-update.html", {
                 "driver": driver,
                 "error": "Error al actualizar el conductor. Verifica los datos."
             })
 
-    return render(request, "app_drivers/update_driver.html", {"driver": driver})
+    return render(request, "app_drivers/dr-update.html", {"driver": driver})

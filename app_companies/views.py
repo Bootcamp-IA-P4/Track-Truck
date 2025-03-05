@@ -75,7 +75,7 @@ def company_dashboard(request, id):
         for shipment in shipments:
             shipment["created_at"] = datetime.fromisoformat(shipment["created_at"].replace("Z", "")).strftime("%Y-%m-%d %H:%M")
             shipment["finished_at"] = datetime.fromisoformat(shipment["finished_at"].replace("Z", "")).strftime("%Y-%m-%d %H:%M")
-    return render(request, 'app_companies/dashboard.html', {
+    return render(request, 'app_companies/cp-dashboard.html', {
         'company': company,
         'shipments': shipments
     })
@@ -89,7 +89,7 @@ def update_company(request, id):
     if response.status_code == 200:
         company = response.json()
     else:
-        return render(request, "app_companies/update_company.html", {"error": "Error al obtener datos."})
+        return render(request, "app_companies/cp-update.html", {"error": "Error al obtener datos."})
 
     if request.method == "POST":
         data = {
@@ -105,11 +105,11 @@ def update_company(request, id):
         update_response = requests.put(update_url, data=data)
 
         if update_response.status_code == 200:
-            return redirect(f"/companies/{id}/dashboard/")  # Redirige de vuelta al dashboard
+            return redirect(f"/companies/{id}/cp-dashboard/")  # Redirige de vuelta al dashboard
         else:
-            return render(request, "app_companies/update_company.html", {
+            return render(request, "app_companies/cp-update.html", {
                 "company": company,
                 "error": "Error al actualizar la empresa. Verifica los datos."
             })
 
-    return render(request, "app_companies/update_company.html", {"company": company})
+    return render(request, "app_companies/cp-update.html", {"company": company})

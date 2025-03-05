@@ -30,7 +30,7 @@ class UserManager(BaseUserManager):
 
 class User(AbstractBaseUser, PermissionsMixin):
     class Meta:
-        db_table = 'app_users_user'
+        db_table = 'users'
     COMPANY = 'company'
     DRIVER = 'driver'
     ADMIN = 'admin'

@@ -71,6 +71,8 @@ def shipmentUpdate(request):
     else:
         return Response(serializer._errors, status=status.HTTP_400_BAD_REQUEST)
 
+
+
 @api_view(['DELETE'])
 def shipmentDelete():
     try:

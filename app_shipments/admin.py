@@ -4,7 +4,7 @@ from .models import Shipment
 @admin.register(Shipment)
 
 class BookAdmin(admin.ModelAdmin):
-    list_display = ('id','description', 'origin', 'destination', 'driver_id', 'company_id', 'created_at', 'finished_at' )
+    list_display = ('description', 'origin', 'destination', 'driver_id', 'company_id', 'created_at', 'finished_at' )
 
     search_fields = ('id','description', 'origin', 'destination', 'driver_id', 'company_id', 'created_at', 'finished_at' )
 

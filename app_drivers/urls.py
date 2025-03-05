@@ -11,6 +11,10 @@ urlpatterns = [
 
     # VISTAS HTML
     path('<int:id>/driver_dashboard/', views.driver_dashboard, name='driver_dashboard'),
-    path('<int:id>/driver_edit/', views.update_driver, name='update_driver'),
+    path('<int:id>/update_driver/', views.update_driver, name='update_driver'),
 
+
+
+# TODO: path('<int:id>/update_driver/', views.update_driver, name='update_driver'), No funciona, 
+# hay que corregir el redireccionamiento o las urls.
 ]

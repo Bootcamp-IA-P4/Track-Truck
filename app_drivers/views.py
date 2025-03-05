@@ -84,7 +84,6 @@ def update_driver(request, id):
     if request.method == "POST":
         data = {
             "name": request.POST["name"],
-            "email": request.POST["email"],
             "phone": request.POST["phone"],
             "address": request.POST["address"],
             "user_id": driver["user_id"],

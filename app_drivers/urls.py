@@ -2,6 +2,7 @@ from django.urls import path
 from .views import get_all_drivers, create_driver, driver_detail, update_driver
 from .import views
 
+app_name = 'drivers'
 urlpatterns = [
     path("", get_all_drivers, name="get_all_drivers"),
     path("create/", create_driver, name="create_driver"),

@@ -92,17 +92,31 @@ def create_company_form(request, user_id):
 # VISTAS QUE LLAMAN A LA API Y DEVUELVEN HTMLS
 import requests
 from django.shortcuts import redirect, get_object_or_404
+from app_companies.models import Company
+from datetime import datetime
+
 
 def company_dashboard(request, id):
-    api_url = f"http://127.0.0.1:8000/companies/{id}/detail/"  # URL de la API
-    response = requests.get(api_url)
+    company = get_object_or_404(Company, id=id)
+    
+    # llamamos a la API para obtener los envíos de la empresa
+    shipments_url = f"http://127.0.0.1:8000/shipments/{id}/co-shipments/"
+    response = requests.get(shipments_url)
 
+    shipments = []
     if response.status_code == 200:
-        company = response.json()
-    else:
-        company = None  # si la API falla, devolvemos None
+        shipments = response.json()  # convertimos la respuesta JSON en una lista de diccionarios
 
-    return render(request, 'app_companies/dashboard.html', {'company': company})
+        # convertimos y formatear las fechas
+        for shipment in shipments:
+            shipment["created_at"] = datetime.fromisoformat(shipment["created_at"].replace("Z", "")).strftime("%Y-%m-%d %H:%M")
+            shipment["finished_at"] = datetime.fromisoformat(shipment["finished_at"].replace("Z", "")).strftime("%Y-%m-%d %H:%M")
+    return render(request, 'app_companies/cp-dashboard.html', {
+        'company': company,
+        'shipments': shipments
+    })
+
+
 
 def update_company(request, id):
     api_url = f"http://127.0.0.1:8000/companies/{id}/detail/"
@@ -111,7 +125,7 @@ def update_company(request, id):
     if response.status_code == 200:
         company = response.json()
     else:
-        return render(request, "app_companies/update_company.html", {"error": "Error al obtener datos."})
+        return render(request, "app_companies/cp-update.html", {"error": "Error al obtener datos."})
 
     if request.method == "POST":
         data = {
@@ -127,55 +141,11 @@ def update_company(request, id):
         update_response = requests.put(update_url, data=data)
 
         if update_response.status_code == 200:
-            return redirect(f"/companies/{id}/dashboard/")  # Redirige de vuelta al dashboard
+            return redirect(f"/companies/{id}/cp-dashboard/")  # Redirige de vuelta al dashboard
         else:
-            return render(request, "app_companies/update_company.html", {
+            return render(request, "app_companies/cp-update.html", {
                 "company": company,
                 "error": "Error al actualizar la empresa. Verifica los datos."
             })
 
-    return render(request, "app_companies/update_company.html", {"company": company})
-
-
-
-# import requests
-
-# def signin(request):
-#     if request.method == 'POST':
-#         form = CustomUserCreationForm(request.POST)
-#         if form.is_valid():
-#             user = form.save()
-#             auth_login(request, user)
-
-#             if user.user_type == 'company':
-#                 # Llamar a la API para crear la compañía
-#                 api_url = "http://127.0.0.1:8000/companies/create/"
-#                 data = {
-#                     'name': request.POST.get('company_name', ''),  # Nombre de la compañía desde el formulario
-#                     'email': user.email,  # Email del usuario registrado
-#                     'phone': request.POST.get('phone', ''),  # Teléfono desde el formulario
-#                     'address': request.POST.get('address', ''),  # Dirección desde el formulario
-#                     'user_id': user.id,  # ID del usuario recién creado
-#                 }
-#                 response = requests.post(api_url, data=data)
-
-#                 if response.status_code == 201:
-#                     return redirect('company_dashboard', id=response.json()['id'])
-#                 else:
-#                     # Manejar errores en caso de que la API falle
-#                     return render(request, 'users/signin.html', {
-#                         'form': form,
-#                         'error': 'Error al crear la compañía. Por favor, inténtalo de nuevo.',
-#                     })
-
-#             elif user.user_type == 'driver':
-#                 # Redirigir a otra vista si es un conductor
-#                 return redirect('create_driver', user_id=user.id)
-
-#             else:
-#                 return redirect('home')  # Redirigir al home por defecto
-
-#     else:
-#         form = CustomUserCreationForm()
-
-#     return render(request, 'users/signin.html', {'form': form})
+    return render(request, "app_companies/cp-update.html", {"company": company})

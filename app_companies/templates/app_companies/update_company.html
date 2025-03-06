@@ -41,8 +41,8 @@
             <button type="submit">Save</button>
         </form>
 
-        <a href="{% url 'company_dashboard' company.id %}" class="cancel-btn">Cancel</a>
-
+        <!-- <a href="{% url 'company_dashboard' company.id %}" class="cancel-btn">Cancel</a> -->
+        <a href="{% url 'companies:company_dashboard' id=company.id %}" class="cancel-btn">Cancel</a>
         {% else %}
             <p>Oops, we couldn't find this company...</p>
         {% endif %}
@@ -54,3 +54,4 @@
 
 </body>
 </html>
+

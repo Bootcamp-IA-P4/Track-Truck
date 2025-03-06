@@ -3,7 +3,7 @@ from django.urls import reverse
 from rest_framework.test import APIClient
 from rest_framework import status
 from .models import Company
-from app_users.models import User  # Importa tu modelo de usuario personalizado
+from app_users.models import User
 
 
 class CompanyAPITestCase(TestCase):
@@ -70,7 +70,7 @@ class CompanyAPITestCase(TestCase):
 
     def test_valid_update_company(self):
         response = self.client.put(
-            reverse('companies:update_company', kwargs={'id': self.company.id}),
+            reverse('companies:update_company_or', kwargs={'id': self.company.id}),
             data=self.valid_payload,
             format='json'
         )
@@ -79,7 +79,7 @@ class CompanyAPITestCase(TestCase):
     def test_invalid_update_company(self):
          # Asegúrate de que el servidor está corriendo para este test
         response = self.client.put(
-            reverse('companies:update_company', kwargs={'id': self.company.id}),
+            reverse('companies:update_company_or', kwargs={'id': self.company.id}),
             data=self.invalid_payload,
             format='json'
         )
@@ -96,4 +96,5 @@ class CompanyAPITestCase(TestCase):
             reverse('companies:delete_company', kwargs={'id': 30})
         )
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
 

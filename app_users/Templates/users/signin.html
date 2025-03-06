@@ -1,7 +1,76 @@
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Sign in</button>
-</form>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register</title>
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'css/signin.css' %}">
+</head>
+<body>
+  <section class="form-register">
+    <h4>Register Form</h4>
+    
+    <form method="post" action="{% url 'signin' %}">
+      {% csrf_token %}
 
+      <input class="controls" type="text" name="username" id="username" placeholder="Enter your Username" required>
+      <input class="controls" type="email" name="email" id="email" placeholder="Enter your Email" required>
+      <input class="controls" type="number" name="phone" id="phone" placeholder="Enter your Phone Number" required>
+      <input class="controls" type="password" name="password" id="password" placeholder="Enter your Password" required>
 
+      <label for="user_type">Register as:</label>
+      <select class="controls" id="user_type" name="user_type" required>
+          <option value="" disabled selected>-- Select --</option>
+          <option value="company">Company</option>
+          <option value="driver">Driver</option>
+      </select>
+
+      <input class="controls hidden" type="text" name="company_name" id="company_name" placeholder="Enter Company Name">
+      <input class="controls hidden" type="text" name="company_address" id="company_address" placeholder="Enter Company Address">
+      <input class="controls hidden" type="text" name="license_number" id="license_number" placeholder="Enter License Number">
+
+      <p>I agree with <a href="#">Terms and Conditions</a></p>
+
+      <input class="botons" type="submit" value="Register">
+      
+      <p><a href="{% url 'login' %}">Already have an account?</a></p>
+    </form>
+  </section>
+
+  <script>
+    document.getElementById('user_type').addEventListener('change', function() {
+        let companyField = document.getElementById('company_name');
+        let companyAddressField = document.getElementById('company_address');
+        let driverField = document.getElementById('license_number');
+        let phoneField = document.getElementById('phone');
+
+        if (this.value === "company") {
+            companyField.classList.remove('hidden');
+            companyField.required = true;
+            companyAddressField.classList.remove('hidden');
+            companyAddressField.required = true;
+            driverField.classList.add('hidden');
+            driverField.required = false;
+            phoneField.required = true;
+        } else if (this.value === "driver") {
+            driverField.classList.remove('hidden');
+            driverField.required = true;
+            companyField.classList.add('hidden');
+            companyField.required = false;
+            companyAddressField.classList.add('hidden');
+            companyAddressField.required = false;
+            phoneField.required = true;
+        } else {
+            companyField.classList.add('hidden');
+            companyField.required = false;
+            companyAddressField.classList.add('hidden');
+            companyAddressField.required = false;
+            driverField.classList.add('hidden');
+            driverField.required = false;
+            phoneField.required = true;
+        }
+    });
+  </script>
+</body>
+</html>

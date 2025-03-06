@@ -2,22 +2,22 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: Tahoma, sans-serif;
   }
   
   body {
     background-color: #fff9eb;
-    font-family: Tahoma, sans-serif;
   }
   
   .form-register {
     width: 400px;
-    background: #f18a0f;
+    background: #24303c;
     padding: 30px;
     margin: auto;
     margin-top: 100px;
-    border-radius: 4px;
-    color: #fff9eb;
-    box-shadow: 7px 13px 37px #fdeec8;
+    border-radius: 8px;
+    color: white;
+    box-shadow: 7px 13px 37px #000;
   }
   
   .form-register h4 {
@@ -28,51 +28,64 @@
   
   .controls {
     width: 100%;
-    background: #fdeec8;
+    background: #24303c;
     padding: 10px;
     border-radius: 4px;
     margin-bottom: 16px;
-    border: 1px solid #b1450c;
-    font-size: 16px;
-    color: #762d11;
+    border: 1px solid #f18a0f;
+    font-size: 18px;
+    color: white;
   }
   
   .hidden {
     display: none;
   }
   
-  .form-register p {
-    text-align: center;
+  .form-register label {
     font-size: 16px;
+    display: block;
+    margin-bottom: 5px;
+  }
+  
+  .form-register select {
+    width: 100%;
+    padding: 10px;
+    border-radius: 4px;
+    background: #24303c;
+    color: white;
+    border: 1px solid #f18a0f;
+    margin-bottom: 16px;
+  }
+  
+  .form-register p {
+    height: 40px;
+    text-align: center;
+    font-size: 18px;
     line-height: 40px;
-    color: #441504;
   }
   
   .form-register a {
-    color: #762d11;
+    color: #f18a0f;
     text-decoration: none;
-    font-weight: bold;
   }
   
   .form-register a:hover {
     text-decoration: underline;
-    color: #b1450c;
   }
   
   .botons {
     width: 100%;
-    background: #762d11;
+    background: #f18a0f;
     border: none;
     padding: 12px;
     color: white;
-    margin: 16px 0;
     font-size: 16px;
     cursor: pointer;
     border-radius: 4px;
-    font-weight: bold;
+    transition: 0.3s;
   }
   
   .botons:hover {
-    background: #903610;
+    background: #d6660a;
   }
   

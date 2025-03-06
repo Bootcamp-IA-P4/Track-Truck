@@ -1,44 +1,52 @@
-{% load static %}
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Sign in</title>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Track Truck</title>
+    <style>
+        /* Estilos para la barra superior y la página */
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
 
-    <link rel="stylesheet" href="{% static 'css/home.css' %}" />
-  </head>
-  <body>
-    <section class="form-login">
-      <h5>Account</h5>
-      <input
-        class="controls"
-        type="text"
-        name="email"
-        value=""
-        placeholder="Email"
-      />
-      <input
-        class="controls"
-        type="password"
-        name="Password"
-        value=""
-        placeholder="Password"
-      />
-      <form>
-        <label for="rol">Select an option:</label>
-        <select id="rol" name="rol">
-          <optgroup label="--Select--">
-            <option value="Companies">Companies</option>
-            <option value="Drivers">Drivers</option>
-          </optgroup>
-        </select>
+        #barraSuperior {
+            background-color: #4CAF50;
+            color: white;
+            text-align: center;
+            font-size: 24px;
+            padding: 10px;
+        }
 
-        <input class="buttons" type="submit" value="Login" />
-      </form>
+        #contenido {
+            text-align: center;
+            margin-top: 50px;
+        }
 
-      <p><a href="/app_users/Templates/users/forgot_password.html">¿Forgot your Password?</a></p>
-      <p><a href="/app_users/Templates/users/login.html">Register</a></p>
-    </section>
-  </body>
+        button {
+            padding: 10px 20px;
+            font-size: 18px;
+            margin: 10px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Barra superior -->
+    <div id="barraSuperior">
+        Track Truck
+    </div>
+
+    <!-- Contenido principal con botones -->
+    <div id="contenido">
+        {% url 'login' as login_url %}
+        <button onclick="window.location.href='{{ login_url }}'">Login</button>
+        {% url 'signin' as signin_url %}
+        <button onclick="window.location.href='{{ signin_url }}'">Signin</button>
+    </div>
+
+</body>
 </html>

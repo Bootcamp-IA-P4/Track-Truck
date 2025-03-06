@@ -1,3 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="/app_users/Templates/login.css">
+  <title>Registration Form</title>
+</head>
+<body>
+  <section class="form-register">
+    <h4>Registration Form</h4>
+    
+    <input class="controls" type="text" name="first_name" id="first_name" placeholder="Enter your First Name">
+    <input class="controls" type="text" name="last_name" id="last_name" placeholder="Enter your Last Name">
+    <input class="controls" type="email" name="email" id="email" placeholder="Enter your Email">
+    <input class="controls" type="password" name="password" id="password" placeholder="Enter your Password">
+
+    <label for="user_type">Register as:</label>
+    <select class="controls" id="user_type">
+      <option value="" disabled selected>-- Select --</option>
+      <option value="company">Company</option>
+      <option value="driver">Driver</option>
+    </select>
+
+    <input class="controls hidden" type="text" name="company_name" id="company_name" placeholder="Enter Company Name">
+    <input class="controls hidden" type="text" name="license_number" id="license_number" placeholder="Enter License Number">
+
+    <p>I agree with <a href="#">Terms and Conditions</a></p>
+    
+    <input class="botons" type="submit" value="Register">
+    
+    <p><a href="#">Already have an account?</a></p>
+  </section>
+
+  <script>
+    document.getElementById('user_type').addEventListener('change', function() {
+      let companyField = document.getElementById('company_name');
+      let driverField = document.getElementById('license_number');
+
+      if (this.value === "company") {
+        companyField.classList.remove('hidden');
+        driverField.classList.add('hidden');
+      } else if (this.value === "driver") {
+        driverField.classList.remove('hidden');
+        companyField.classList.add('hidden');
+      } else {
+        companyField.classList.add('hidden');
+        driverField.classList.add('hidden');
+      }
+    });
+  </script>
+</body>
+</html>
+
 <form method="post">
     {% csrf_token %}
     {{ form.as_p }}

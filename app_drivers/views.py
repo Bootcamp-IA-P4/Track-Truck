@@ -1,9 +1,12 @@
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, render, redirect
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 from .models import Driver
 from .serializers import DriverSerializer
+import requests
+from datetime import datetime
+import json
 
 # Obtener todos los conductores
 @api_view(['GET'])
@@ -40,3 +43,63 @@ def driver_detail(request, id):
     elif request.method == 'DELETE':  # 🔹 Eliminar un conductor
         driver.delete()
         return Response({"message": "Conductor eliminado correctamente"}, status=status.HTTP_204_NO_CONTENT)
+
+
+# VISTAS QUE LLAMAN A LA API Y DEVUELVEN HTMLS
+
+
+def driver_dashboard(request, id):
+    driver = get_object_or_404(Driver, id=id)
+    
+    # llamamos a la API para obtener los envíos del driver
+    shipments_url = f"http://127.0.0.1:8000/shipments/{id}/dr-shipments/"
+    response = requests.get(shipments_url)
+
+    shipments = []
+    if response.status_code == 200:
+        shipments = response.json()  # convertimos la respuesta JSON en una lista de diccionarios
+
+        # convertimos y formatear las fechas
+        for shipment in shipments:
+            shipment["created_at"] = datetime.fromisoformat(shipment["created_at"].replace("Z", "")).strftime("%Y-%m-%d %H:%M")
+            shipment["finished_at"] = datetime.fromisoformat(shipment["finished_at"].replace("Z", "")).strftime("%Y-%m-%d %H:%M")
+    return render(request, 'app_drivers/dr-dashboard.html', {
+        'driver': driver,
+        'shipments': shipments
+    })
+
+def update_driver(request, id):
+    # URL para obtener los datos del conductor
+    api_url = f"http://127.0.0.1:8000/drivers/{id}/detail/"
+    response = requests.get(api_url)
+
+    if response.status_code == 200:
+        driver = response.json()
+    else:
+        return render(request, "app_drivers/dr-update.html", {"error": "Error al obtener datos."})
+
+    if request.method == "POST":
+        # recogemos los datos del formulario
+        data = {
+            "name": request.POST["name"],
+            "truck_plate": request.POST["truck_plate"],
+            "phone": request.POST["phone"],
+            "user": driver["user"]
+        }
+
+        # convertimos el diccionario en JSON
+        json_data = json.dumps(data)
+        headers = {'Content-Type': 'application/json'}
+
+        # hacemos la solicitud PUT con los datos en formato JSON
+        update_response = requests.put(api_url, data=json_data, headers=headers)
+
+        if update_response.status_code == 200:
+            return redirect(f"/drivers/{id}/dr-dashboard/")
+        else:
+            return render(request, "app_drivers/dr-update.html", {
+                "driver": driver,
+                "error": "Error al actualizar el conductor. Verifica los datos."
+            })
+
+    return render(request, "app_drivers/dr-update.html", {"driver": driver})

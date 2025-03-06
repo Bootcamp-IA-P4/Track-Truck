@@ -1,0 +1,95 @@
+{% load static %}  <!-- Cargar archivos estáticos -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ company.name }}'s Dashboard</title>
+
+    <link rel="stylesheet" href="{% static 'css/dashboard_styles.css' %}">
+</head>
+<body>
+
+    <header>
+        <h1>{{ company.name }}'s Dashboard</h1>
+    </header>
+
+    <main>
+        {% if company %}
+        <div class="cp-dashboard">
+            <div class="cp-data-shipments">
+                <div class="cp-data">
+                    <h3>Welcome, {{ company.name }}!</h3>
+                    <p><strong>Name:</strong> {{ company.name }}</p>
+                    <p><strong>Email:</strong> {{ company.email }}</p>
+                    <p><strong>Phone:</strong> {{ company.phone }}</p>
+                    <p><strong>Address:</strong> {{ company.address|default:"No disponible" }}</p>
+
+                    <a href="{% url 'update_company' company.id %}">
+                        <button>Update</button>
+                    </a>
+                </div>
+
+                <div class="cp-shipments">
+                    <div class="cp-title">
+                        <h3>ALL SHIPMENTS</h3>
+                    </div>
+
+                    <div class="cp-shimpments-table">
+                        {% if shipments %}
+                        <table border="1" class="cp-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Description</th>
+                                    <th>Origin</th>
+                                    <th>Destination</th>
+                                    <th>Created At</th>
+                                    <th>Driver</th>
+                                    <th>Finished At</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for shipment in shipments %}
+                                <tr>
+                                    <td>{{ shipment.id }}</td>
+                                    <td>{{ shipment.description }}</td>
+                                    <td>{{ shipment.origin }}</td>
+                                    <td>{{ shipment.destination }}</td>
+                                    <td>{{ shipment.created_at }}</td>
+                                    <td class="td-color">
+                                        <a href="{% url 'company_dashboard' shipment.driver_id %}" class="driver-link">
+                                            {{ shipment.driver_id }}
+                                        </a>
+                                    </td>
+                                    <td>{{ shipment.finished_at }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        {% else %}
+                            <p>No shipments available for this company.</p>
+                        {% endif %}
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="cp-create-shipment">
+                <h3>Create shipment</h3>
+                <div class="cp-create-shipments">
+                    
+                </div>
+            </div>
+        </div>
+        {% else %}
+            <p>Oops, we couldn't find this company...</p>
+        {% endif %}
+    </main>
+
+    <footer>
+        <p>&copy; 2025 TRACK TRUCK</p>
+    </footer>
+
+</body>
+</html>

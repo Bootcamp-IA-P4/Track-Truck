@@ -1,0 +1,88 @@
+{% load static %}  <!-- Cargar archivos estáticos -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ driver.name }}'s Dashboard</title>
+
+    <link rel="stylesheet" href="{% static 'css/dashboard_styles.css' %}">
+</head>
+<body>
+
+    <header>
+        <h1>{{ driver.name }}'s Dashboard</h1>
+    </header>
+
+    <main>
+        {% if driver %}
+        <div class="cp-dashboard">
+            <div class="cp-data-shipments">
+                <div class="cp-data">
+                    <h3>Welcome, {{ driver.name }}!</h3>
+                    <p><strong>Name:</strong> {{ driver.name }}</p>
+                    <p><strong>Phone:</strong> {{ driver.phone }}</p>
+                    <p><strong>Plate:</strong> {{ driver.truck_plate}}</p>
+
+                    <a href="{% url 'update_driver' driver.id %}">
+                        <button>Update</button>
+                    </a>
+                </div>
+
+                <div class="cp-shipments">
+                    <div class="cp-title">
+                        <h3>ALL SHIPMENTS</h3>
+                    </div>
+
+                    <div class="cp-shimpments-table">
+                        {% if shipments %}
+                        <table border="1" class="cp-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Description</th>
+                                    <th>Origin</th>
+                                    <th>Destination</th>
+                                    <th>Company</th>
+                                    <th>Created At</th>
+                                    <th>Finished At</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for shipment in shipments %}
+                                <tr>
+                                    <td>{{ shipment.id }}</td>
+                                    <td>{{ shipment.description }}</td>
+                                    <td>{{ shipment.origin }}</td>
+                                    <td>{{ shipment.destination }}</td>
+                                    <td class="td-color">
+                                        <a href="{% url 'company_dashboard' shipment.company_id %}" class="driver-link">
+                                            {{ shipment.company_id }}
+                                        </a>
+                                    </td>
+                                    <td>{{ shipment.created_at }}</td>
+                                    <td>{{ shipment.finished_at }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        {% else %}
+                            <p>No shipments available for this company.</p>
+                        {% endif %}
+                    </div>
+                    
+                </div>
+            </div>
+
+        </div>
+        {% else %}
+            <p>Oops, we couldn't find this driver...</p>
+        {% endif %}
+    </main>
+
+    <footer>
+        <p>&copy; 2025 TRACK TRUCK</p>
+    </footer>
+
+</body>
+</html>

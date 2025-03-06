@@ -13,13 +13,30 @@ def getAllCompanies(request):
     serializer = CompanySerializer(companies, many=True)
     return Response(serializer.data)
 
+# @api_view(['POST'])
+# def createCompany(request):
+#     serializer = CompanySerializer(data=request.data)
+#     if serializer.is_valid():
+#         serializer.save()
+#         return Response(serializer.data, status=status.HTTP_201_CREATED)
+#     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 @api_view(['POST'])
 def createCompany(request):
-    serializer = CompanySerializer(data=request.data)
+    data = request.data.copy()
+    user_id = data.pop('user_id', None)
+    
+    if user_id is None:
+        return Response({"error": "user_id is required"}, status=status.HTTP_400_BAD_REQUEST)
+    
+    data['user_id'] = user_id
+    serializer = CompanySerializer(data=data)
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
 
 @api_view(['PUT','GET','DELETE', 'PATCH'])
 def companyDetail(request, id):
@@ -51,22 +68,55 @@ def companyDetail(request, id):
         return Response(status=status.HTTP_204_NO_CONTENT)
     
 
+def create_company_form(request, user_id):
+    if request.method == 'POST':
+        company_data = {
+            'user_id': user_id,
+            'name': request.POST.get('name'),
+            'email': request.POST.get('email'),
+            'phone': request.POST.get('phone'),
+        }
+        response = requests.post('http://localhost:8000/companies/create/', json=company_data)
+        if response.status_code == 201:
+            #return redirect('company_dashboard') ### Cambiar a la vista de detalle de la compañía !!!
+            return redirect('home') ### Cambiar a la vista de detalle de la compañía !!!
+        else:
+            return render(request, 'create_company.html', {'error': 'Error al crear la compañía', 'user_id': user_id})
+    else:
+        return render(request, 'create_company.html', {'user_id': user_id})
+
+    
+
 
 
 # VISTAS QUE LLAMAN A LA API Y DEVUELVEN HTMLS
 import requests
 from django.shortcuts import redirect, get_object_or_404
+from app_companies.models import Company
+from datetime import datetime
+
 
 def company_dashboard(request, id):
-    api_url = f"http://127.0.0.1:8000/companies/{id}/detail/"  # URL de la API
-    response = requests.get(api_url)
+    company = get_object_or_404(Company, id=id)
+    
+    # llamamos a la API para obtener los envíos de la empresa
+    shipments_url = f"http://127.0.0.1:8000/shipments/{id}/co-shipments/"
+    response = requests.get(shipments_url)
 
+    shipments = []
     if response.status_code == 200:
-        company = response.json()
-    else:
-        company = None  # si la API falla, devolvemos None
+        shipments = response.json()  # convertimos la respuesta JSON en una lista de diccionarios
 
-    return render(request, 'app_companies/dashboard.html', {'company': company})
+        # convertimos y formatear las fechas
+        for shipment in shipments:
+            shipment["created_at"] = datetime.fromisoformat(shipment["created_at"].replace("Z", "")).strftime("%Y-%m-%d %H:%M")
+            shipment["finished_at"] = datetime.fromisoformat(shipment["finished_at"].replace("Z", "")).strftime("%Y-%m-%d %H:%M")
+    return render(request, 'app_companies/cp-dashboard.html', {
+        'company': company,
+        'shipments': shipments
+    })
+
+
 
 def update_company(request, id):
     api_url = f"http://127.0.0.1:8000/companies/{id}/detail/"
@@ -75,7 +125,7 @@ def update_company(request, id):
     if response.status_code == 200:
         company = response.json()
     else:
-        return render(request, "app_companies/update_company.html", {"error": "Error al obtener datos."})
+        return render(request, "app_companies/cp-update.html", {"error": "Error al obtener datos."})
 
     if request.method == "POST":
         data = {
@@ -91,11 +141,11 @@ def update_company(request, id):
         update_response = requests.put(update_url, data=data)
 
         if update_response.status_code == 200:
-            return redirect(f"/companies/{id}/dashboard/")  # Redirige de vuelta al dashboard
+            return redirect(f"/companies/{id}/cp-dashboard/")  # Redirige de vuelta al dashboard
         else:
-            return render(request, "app_companies/update_company.html", {
+            return render(request, "app_companies/cp-update.html", {
                 "company": company,
                 "error": "Error al actualizar la empresa. Verifica los datos."
             })
 
-    return render(request, "app_companies/update_company.html", {"company": company})
+    return render(request, "app_companies/cp-update.html", {"company": company})

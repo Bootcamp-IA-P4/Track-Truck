@@ -1,0 +1,53 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update your data</title>
+
+    <link rel="stylesheet" href="{% static 'css/update.css' %}">
+</head>
+<body>
+
+    <header>
+        <h1>Update your Driver data</h1>
+    </header>
+
+    <main>
+        {% if driver %}
+        <form method="post">
+            <input type="hidden" name="_method" value="PUT"> <!-- Este campo simula el método PUT -->
+
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="name">Name:</label>
+                <input type="text" name="name" value="{{ driver.name }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="phone">Phone:</label>
+                <input type="text" name="phone" value="{{ driver.phone }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="truck_plate">Truck Plate:</label>
+                <input type="text" name="truck_plate" value="{{ driver.truck_plate }}" required>
+            </div>
+
+            <button type="submit">Save</button>
+        </form>
+
+        <a href="{% url 'driver_dashboard' driver.id %}" class="cancel-btn">Cancel</a>
+
+        {% else %}
+            <p>Oops, we couldn't find this driver...</p>
+        {% endif %}
+    </main>
+
+    <footer>
+        <p>&copy; 2025 TRACK TRUCK</p>
+    </footer>
+
+</body>
+</html>

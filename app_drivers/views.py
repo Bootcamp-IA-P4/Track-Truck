@@ -44,6 +44,21 @@ def driver_detail(request, id):
         driver.delete()
         return Response({"message": "Conductor eliminado correctamente"}, status=status.HTTP_204_NO_CONTENT)
 
+def create_driver_form(request, user_id):
+    if request.method == 'POST':
+        driver_data = {
+            'user': user_id,
+            'name': request.POST.get('name'),
+            'truck_plate': request.POST.get('truck_plate'),
+            'phone': request.POST.get('phone')
+        }
+        response = requests.post('http://localhost:8000/drivers/create/', json=driver_data)
+        if response.status_code == 201:
+            return redirect('home') ### Cambiar a la vista de driver !!!
+        else:
+            return render(request, 'app_drivers/create_driver.html', {'error': 'Error al crear driver', 'user_id': user_id})
+    else:
+        return render(request, 'app_drivers/create_driver.html', {'user_id': user_id})
 
 # VISTAS QUE LLAMAN A LA API Y DEVUELVEN HTMLS
 

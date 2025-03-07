@@ -1,6 +1,6 @@
-from django.test import TestCase
-from django.urls import reverse
-from rest_framework.test import APIClient
+from django.test import TestCase #Clase base para crear tests 
+from django.urls import reverse #genera URLs a partir de nombres de vistas
+from rest_framework.test import APIClient #crea clientes HTTP que interactúan con la API
 from rest_framework import status
 from .models import Company
 from app_users.models import User
@@ -8,7 +8,7 @@ from app_users.models import User
 
 class CompanyAPITestCase(TestCase):
     def setUp(self):
-        self.client = APIClient()
+        self.client = APIClient()# para lanzar https
         self.user = User.objects.create_user(username='testuser', password='12345', email='test@example.com')
 
         self.company = Company.objects.create(
@@ -36,9 +36,9 @@ class CompanyAPITestCase(TestCase):
         }
 
     def test_get_all_companies(self):
-        response = self.client.get(reverse('companies:list_companies'))
+        response = self.client.get(reverse('companies:list_companies'))#lanza un get al endpoint
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data), 1)
+        self.assertEqual(len(response.data), 1) #verifica que la respuesta tenga un solo objeto , la compañia creada en el setup
 
     def test_create_valid_company(self):
         response = self.client.post(
@@ -58,7 +58,7 @@ class CompanyAPITestCase(TestCase):
 
     def test_get_valid_single_company(self):
         response = self.client.get(
-            reverse('companies:detail', kwargs={'id': self.company.id})
+            reverse('companies:detail', kwargs={'id': self.company.id}) #keyword arguments,  capturar y procesar argumentos que se pasan a través de la URL. Genera '/companies/1/detail/'
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 

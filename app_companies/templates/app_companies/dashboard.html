@@ -24,15 +24,15 @@
                 <p><strong>Phone:</strong> {{ company.phone }}</p>
                 <p><strong>Address:</strong> {{ company.address|default:"No disponible" }}</p>
 
-                <a href="{% url 'update_company' company.id %}">
+                <a href="{% url 'companies:update_company' id=company.id %}">
                     <button>Update</button>
                 </a>
             </div>
 
             <div class="company_actions">
                 <div class="company_actions_buttons">
-                    <a href="{% url 'update_company' company.id %}" class="btn btn-create">Create Shippment</a>
-                    <a href="{% url 'update_company' company.id %}" class="btn btn-view">View Shippments</a>
+                    <a href="{% url 'companies:update_company' id=company.id %}" class="btn btn-create">Create Shippment</a>
+                    <a href="{% url 'companies:update_company' id=company.id %}" class="btn btn-view">View Shippments</a>
                 </div>
             </div>
         </div>

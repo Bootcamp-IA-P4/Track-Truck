@@ -36,7 +36,7 @@ cd Track-Truck
 ```
 
 ### 3️⃣ Descarga el entorno virtual:
-
+⚠️ linux/mac
 ```textplain
 uv venv .venv
 ```
@@ -59,8 +59,13 @@ Descargamos requests:
 ```textplain
 uv pip install requests
 ```
+### 7️⃣ Ejecuta las migraciones:
 
-### 7️⃣ Accede a nuestra API:
+```texplain
+python manage.py migrate
+```
+
+### 8️⃣ Accede a nuestra API:
 
 ```textplain
 python manage.py runserver

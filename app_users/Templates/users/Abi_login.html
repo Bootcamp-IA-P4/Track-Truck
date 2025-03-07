@@ -1,0 +1,45 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign in</title>
+
+    <link rel="stylesheet" href="{% static 'css/login.css' %}" />
+  </head>
+  <body>
+    <section class="form-login">
+      <h5>Account</h5>
+      <input
+        class="controls"
+        type="text"
+        name="email"
+        value=""
+        placeholder="Email"
+      />
+      <input
+        class="controls"
+        type="password"
+        name="Password"
+        value=""
+        placeholder="Password"
+      />
+      <form>
+        <label for="rol">Select an option:</label>
+        <select id="rol" name="rol">
+          <optgroup label="--Select--">
+            <option value="Companies">Companies</option>
+            <option value="Drivers">Drivers</option>
+          </optgroup>
+        </select>
+
+        <input class="buttons" type="submit" value="Login" />
+      </form>
+
+      <p><a href="/app_users/Templates/users/forgot_password.html">¿Forgot your Password?</a></p>
+      <p><a href="{% url 'signin' %}">Signin</a></p>
+      
+    </section>
+  </body>
+</html>

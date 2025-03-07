@@ -4,11 +4,15 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .serializers import CompanySerializer
 from rest_framework import status
+import logging
+
+logger = logging.getLogger('app_companies')
 
 # Create your views here.
 
 @api_view(['GET'])
 def getAllCompanies(request):
+    logger.debug('Getting all companies')
     companies = Company.objects.all()
     serializer = CompanySerializer(companies, many=True)
     return Response(serializer.data)
@@ -23,6 +27,7 @@ def getAllCompanies(request):
 
 @api_view(['POST'])
 def createCompany(request):
+    logger.debug('Creating a company')
     data = request.data.copy()
     user_id = data.pop('user_id', None)
     
@@ -43,27 +48,36 @@ def companyDetail(request, id):
     try:
         company = Company.objects.get(pk=id)
     except Company.DoesNotExist:
+        logger.error(f'Company with id {id} not found')
         return Response(status=status.HTTP_404_NOT_FOUND)
     
     if request.method == 'GET':
+        logger.debug(f'Retrieving details of company with ID {id}')
         serializer = CompanySerializer(company)
         return Response(serializer.data)
     
     elif request.method == 'PUT':
+        logger.debug(f'Updating company with ID {id}')
         serializer = CompanySerializer(instance=company, data=request.data)
         if serializer.is_valid():
             serializer.save()
+            logger.info(f'Company with id {id} updated')
             return Response(serializer.data)
+        logger.warning(f'Error updating company with ID {id}: {serializer.errors}')
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
     elif request.method == 'PATCH':
+        logger.debug(f'Patching company with id {id}')
         serializer = CompanySerializer(instance=company, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
+            logger.info(f'Company with id {id} was patched')
             return Response(serializer.data)
+        logger.warning(f'Error patching company with id {id}: {serializer.errors}')
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
     elif request.method == 'DELETE':
+        logger.warning(f'Deleting company with id {id}')
         company.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
     

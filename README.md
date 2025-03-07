@@ -1,37 +1,58 @@
-# Track-Truck
-Grupo 1- Api rest
+# Track-Truck 🚚
 
-Como usar nuestra API:
+## ¿Qué es Track Truck?
 
-primero descarga este repositorio:
+API REST que conecta empresas con conductores para facilitar el transporte de mercancías.
+Permite a las empresas publicar rutas y a los conductores encontrar oportunidades de transporte.
+
+### 🌟 Características
+✅ Registro y autenticación de usuarios (empresas y conductores).  
+✅ Publicación y gestión de rutas de transporte.  
+✅ Asignación de rutas a conductores.  
+✅ Documentación interactiva con Swagger. 
+
+---
+
+## 🛠️ Tecnologías Utilizadas
+
+- **Backend:** Django REST Framework (DRF) + Python  
+- **Base de Datos:** PostgreSQL  
+- **Frontend:** HTML + CSS (básico)  
+- **Entorno Virtual:** `.env` para configuración segura  
+
+---
+
+## 🚀 Instalación y Configuración
+
+### 1️⃣ Clonar el repositorio
 
 ```textplain
 git clone
 ```
-Entramos:
+### 2️⃣ Entramos:
 
 ```textplain
 cd Track-Truck
 ```
 
-Descarga el entorno virtual:
+### 3️⃣ Descarga el entorno virtual:
 
 ```textplain
 uv venv .venv
 ```
 
-Inicia el entorno virtual:
+### 4️⃣ Inicia el entorno virtual:
 
 ```textplain
 source .venv/bin/activate
 ```
 
-Descargamos las siguientes dependencias:
+### 5️⃣ Descarga las siguientes dependencias:
 ```textplain
 uv pip install -r requirements.txt
 ```
 
-Editamos el archivo .env y le retiramos la palabra .example
+### 6️⃣ Edita el archivo .env y retira la palabra .example
 
 Descargamos requests:
 
@@ -39,7 +60,7 @@ Descargamos requests:
 uv pip install requests
 ```
 
-Y ahora estas listo para acceder a nuestra API:
+### 7️⃣ Accede a nuestra API:
 
 ```textplain
 python manage.py runserver

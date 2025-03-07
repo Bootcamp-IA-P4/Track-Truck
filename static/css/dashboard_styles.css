@@ -1,0 +1,97 @@
+@import url('colors.css');
+
+body {
+    font-family: Tahoma, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+    text-align: center;
+}
+
+header {
+    background-color: var(--color-10-900);
+    color: white;
+    padding: 20px;
+    font-size: 18px;
+}
+
+.cp-data-shipments {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin: 20px auto;
+    max-width: 1200px;
+    gap: 20px;
+    padding: 10px;
+}
+
+.cp-data {
+    background: white;
+    padding: 20px;
+    text-align: left;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    flex: 1;
+    max-width: 200px;
+}
+
+button {
+    background-color: var(--color-10-900);
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 15px;
+    font-size: 16px;
+}
+
+button:hover {
+    background-color: var( --color-9-800);
+}
+
+.cp-shipments-table {
+    margin-top: 50px;
+    padding-top: 50px;
+}
+
+.td-color a{
+    color: black;
+    text-decoration: none;
+}
+
+.cp-table {
+    width: 100%;
+}
+
+.cp-title {
+    text-align: left;
+    background: linear-gradient(135deg, var(--color-5-400), var(--color-6-500));
+    color: white;
+    margin: 5px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    font-size: 15px;
+}
+
+.cp-title h3 {
+    padding: 10px;
+}
+
+footer {
+    margin-top: 30px;
+    padding: 10px;
+    background-color: #333;
+    color: white;
+}
+
+
+@media (max-width: 768px) {
+    .cp-data-shipments {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+}

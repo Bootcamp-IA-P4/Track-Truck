@@ -14,7 +14,7 @@ urlpatterns = [
     path('<int:id>/delete/', views.companyDetail, name='delete_company'),
 
     # VISTAS HTML
-    path('<int:id>/dashboard/', views.company_dashboard, name='company_dashboard'),
-    path('<int:id>/edit/', views.update_company, name='update_company'),
+    path('<int:id>/cp-dashboard/', views.company_dashboard, name='company_dashboard'),
+    path('<int:id>/cp-update/', views.update_company, name='update_company'),
 ]
 

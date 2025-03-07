@@ -38,13 +38,21 @@ cd Track-Truck
 ### 3️⃣ Descarga el entorno virtual:
 ⚠️ linux/mac
 ```textplain
-uv venv .venv
+python3 -m venv .venv
+```
+⚠️ windows
+```texrplain
+python -m venv .venv
 ```
 
 ### 4️⃣ Inicia el entorno virtual:
-
+⚠️ linux/mac
 ```textplain
 source .venv/bin/activate
+```
+⚠️ windows
+```textplain
+.venv\Scripts\activate
 ```
 
 ### 5️⃣ Descarga las siguientes dependencias:
@@ -52,20 +60,8 @@ source .venv/bin/activate
 uv pip install -r requirements.txt
 ```
 
-### 6️⃣ Edita el archivo .env y retira la palabra .example
 
-Descargamos requests:
-
-```textplain
-uv pip install requests
-```
-### 7️⃣ Ejecuta las migraciones:
-
-```texplain
-python manage.py migrate
-```
-
-### 8️⃣ Accede a nuestra API:
+### 6️⃣ Accede a nuestra API:
 
 ```textplain
 python manage.py runserver

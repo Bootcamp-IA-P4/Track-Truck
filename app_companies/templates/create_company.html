@@ -4,6 +4,10 @@
     <input type="text" name="name" placeholder="Nombre de la compañía" required>
     <input type="email" name="email" placeholder="Email de la compañía" required>
     <input type="tel" name="phone" placeholder="Teléfono de la compañía" required>
-    <!-- Añade otros campos necesarios -->
+    <input type="text" name="address" placeholder="Dirección de la compañía" required> 
     <button type="submit">Crear Compañía</button>
+
+    {% if error %}
+    <p style="color: red;">{{ error }}</p>
+    {% endif %}
 </form>

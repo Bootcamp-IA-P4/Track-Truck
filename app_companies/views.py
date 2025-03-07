@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from .serializers import CompanySerializer
 from rest_framework import status
 import logging
+from django.db.models import Q
 
 logger = logging.getLogger('app_companies')
 
@@ -36,6 +37,11 @@ def createCompany(request):
     
     data['user_id'] = user_id
     serializer = CompanySerializer(data=data)
+
+    if Company.objects.filter(Q(name=data['name']) | Q(email=data['email'])).exists():
+        return Response({"error": "A company with this name or email already exists."}, status=status.HTTP_400_BAD_REQUEST)
+    
+
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -89,13 +95,18 @@ def create_company_form(request, user_id):
             'name': request.POST.get('name'),
             'email': request.POST.get('email'),
             'phone': request.POST.get('phone'),
+            'address': request.POST.get('address'),
         }
         response = requests.post('http://localhost:8000/companies/create/', json=company_data)
         if response.status_code == 201:
-            #return redirect('company_dashboard') ### Cambiar a la vista de detalle de la compañía !!!
-            return redirect('home') ### Cambiar a la vista de detalle de la compañía !!!
+            return redirect('home')
         else:
-            return render(request, 'create_company.html', {'error': 'Error al crear la compañía', 'user_id': user_id})
+            try:
+                error_message = response.json().get('error', 'Error creating company')  # Extract the error message from the JSON response
+            except:
+                error_message = 'Error creating company'
+
+            return render(request, 'create_company.html', {'error': error_message, 'user_id': user_id})
     else:
         return render(request, 'create_company.html', {'user_id': user_id})
 

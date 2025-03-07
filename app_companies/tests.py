@@ -9,7 +9,7 @@ from app_users.models import User
 class CompanyAPITestCase(TestCase):
     def setUp(self):
         self.client = APIClient()# para lanzar https
-        self.user = User.objects.create_user(username='testuser', password='12345', email='test@example.com')
+        self.user = User.objects.create_user(username='testuser', password='12345', email='test@example.com',user_type="admin")
 
         self.company = Company.objects.create(
             user_id=self.user,

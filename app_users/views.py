@@ -52,15 +52,25 @@ def signin(request):
 #         form = CustomUserCreationForm
 #     return render(request, 'users/signin.html', {'form': form})
 
+
 def login_view(request):
     if request.method == 'POST':
         form = CustomAuthenticationForm(request, data=request.POST)
         if form.is_valid():
             user = form.get_user()
             auth_login(request, user)
-            return redirect('home')
+
+            if user.user_type == 'company':
+                company = user.company
+                return redirect('companies:company_dashboard', id=company.id)
+            elif user.user_type == 'driver':
+                driver = user.driver
+                return redirect('drivers:driver_dashboard', id=driver.id)
+            else:
+                return redirect('home')
     else:
         form = CustomAuthenticationForm()
+
     return render(request, 'users/login.html', {'form': form})
 
 def logout_view(request):

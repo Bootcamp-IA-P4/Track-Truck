@@ -11,4 +11,3 @@ class CustomAuthenticationForm(AuthenticationForm):
     class Meta:
         model = User
 
-

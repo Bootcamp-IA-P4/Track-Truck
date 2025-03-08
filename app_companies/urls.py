@@ -17,4 +17,3 @@ urlpatterns = [
     path('<int:id>/cp-dashboard/', views.company_dashboard, name='company_dashboard'),
     path('<int:id>/cp-update/', views.update_company, name='update_company'),
 ]
-

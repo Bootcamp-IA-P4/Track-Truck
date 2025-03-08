@@ -58,7 +58,7 @@
                                     <td>{{ shipment.destination }}</td>
                                     <td>{{ shipment.created_at }}</td>
                                     <td class="td-color">
-                                        <a href="{% url 'companies:company_dashboard' shipment.driver_id %}" class="driver-link">
+                                        <a href="{% url 'drivers:driver_dashboard' shipment.driver_id %}" class="driver-link">
                                             {{ shipment.driver_id }}
                                         </a>
                                     </td>

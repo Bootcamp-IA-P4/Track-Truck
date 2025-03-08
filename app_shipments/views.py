@@ -80,3 +80,24 @@ def shipmentDelete():
         return Response({"message": "Shipment deleted"},status=status.HTTP_200_OK)
     except Exception as e:
         return Response(status=status.HTTP_400_BAD_REQUEST)
+
+# from django.shortcuts import render, redirect
+# from .models import Shipment
+# from .forms import ShipmentForm
+# # VISTAS HTML
+# def create_shipment(request):
+#     if request.method == 'POST':
+#         form = ShipmentForm(request.POST)
+#         company_id = request.POST.get('company_id')  # Obtenemos el company_id desde el formulario
+
+#         if form.is_valid():
+#             shipment = form.save(commit=False)
+#             shipment.company_id = company_id  # Asignamos el company_id pasado por el formulario
+#             shipment.save()
+#             return redirect('companies:dashboard', company_id=company_id)  # Redirigimos al dashboard de la compañía
+#         else:
+#             return render(request, 'cp-dashboard.html', {'form': form, 'form_errors': True})
+#     else:
+#         form = ShipmentForm()
+
+#     return render(request, 'cp-dashboard.html', {'form': form})

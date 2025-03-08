@@ -40,6 +40,8 @@ def signin(request):
 
 
 
+
+
 # def login_view(request):
 #     if request.method == 'POST':
 
@@ -50,24 +52,20 @@ def signin(request):
 #         form = CustomUserCreationForm
 #     return render(request, 'users/signin.html', {'form': form})
 
-# def login_view(request):
-#     if request.method == 'POST':
-#         form = CustomAuthenticationForm(request, data=request.POST)
-#         if form.is_valid():
-#             user = form.get_user()
-#             auth_login(request, user)
-#             return redirect('home')
-#     else:
-#         form = CustomAuthenticationForm()
-#     return render(request, 'users/login.html', {'form': form})
+def login_view(request):
+    if request.method == 'POST':
+        form = CustomAuthenticationForm(request, data=request.POST)
+        if form.is_valid():
+            user = form.get_user()
+            auth_login(request, user)
+            return redirect('home')
+    else:
+        form = CustomAuthenticationForm()
+    return render(request, 'users/login.html', {'form': form})
 
 def logout_view(request):
     auth_logout(request)
     return redirect('login')
-
-def login_view(request):
-     return render(request, 'users/login.html')
-
 
 def forgot_password(request):
     return render(request, 'forgot_password.html')

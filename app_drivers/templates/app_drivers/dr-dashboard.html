@@ -24,7 +24,7 @@
                     <p><strong>Phone:</strong> {{ driver.phone }}</p>
                     <p><strong>Plate:</strong> {{ driver.truck_plate}}</p>
 
-                    <a href="{% url 'update_driver' driver.id %}">
+                    <a href="{% url 'drivers:update_driver' driver.id %}">
                         <button>Update</button>
                     </a>
                 </div>
@@ -56,7 +56,7 @@
                                     <td>{{ shipment.origin }}</td>
                                     <td>{{ shipment.destination }}</td>
                                     <td class="td-color">
-                                        <a href="{% url 'company_dashboard' shipment.company_id %}" class="driver-link">
+                                        <a href="{% url 'companies:company_dashboard' shipment.company_id %}" class="driver-link">
                                             {{ shipment.company_id }}
                                         </a>
                                     </td>

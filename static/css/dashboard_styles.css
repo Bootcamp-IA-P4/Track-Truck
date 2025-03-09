@@ -2,6 +2,10 @@
 
 body {
     font-family: Tahoma, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
     margin: 0;
     padding: 0;
     background-color: #f4f4f4;
@@ -15,15 +19,24 @@ header {
     font-size: 18px;
 }
 
+.cp-dashboard {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+    max-width: 1200px;
+    margin: 20px auto;
+}
+
 .cp-data-shipments {
     display: grid;
     grid-template-columns: 200px 1fr;
     justify-content: space-between;
     align-items: flex-start;
-    margin: 20px auto;
-    max-width: 1200px;
     gap: 20px;
     padding: 10px;
+    flex: 1;
 }
 
 .cp-data {
@@ -32,8 +45,6 @@ header {
     text-align: left;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    flex: 1;
-    max-width: 200px;
 }
 
 button {
@@ -86,6 +97,15 @@ footer {
     color: white;
 }
 
+.cp-create-shipments {
+    width: 100%;
+    max-width: 450px;
+    background: #fbdc8c;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 7px 13px 37px #fdeec8;
+    margin: 0 auto;
+}
 
 @media (max-width: 768px) {
     .cp-data-shipments {
@@ -94,4 +114,8 @@ footer {
 }
 
 @media (max-width: 480px) {
+    .cp-create-shipments {
+        width: 100%;
+        max-width: 400px;
+    }
 }

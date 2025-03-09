@@ -6,15 +6,27 @@ from rest_framework import status
 from .models import Shipment
 
 
-@api_view(['POST']) #CREATE
+@api_view(['POST']) 
 def shipmentCreate(request):
-    serializer = ShipmentSerializer(data=request.data)
-    if serializer.is_valid():
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_200_OK)
-    else:
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    try:
+        data = request.data.copy()
 
+        last_shipment = Shipment.objects.order_by('-id').first()
+        data['id'] = last_shipment.id + 1 if last_shipment else 1
+
+        if 'finished_at' in data and data['finished_at'] == '':
+            data.pop('finished_at')
+
+        serializer = ShipmentSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    except Exception as e:
+        return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+    
 @api_view(['GET']) 
 def shipmentList(request):
     try:
@@ -81,23 +93,3 @@ def shipmentDelete():
     except Exception as e:
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
-# from django.shortcuts import render, redirect
-# from .models import Shipment
-# from .forms import ShipmentForm
-# # VISTAS HTML
-# def create_shipment(request):
-#     if request.method == 'POST':
-#         form = ShipmentForm(request.POST)
-#         company_id = request.POST.get('company_id')  # Obtenemos el company_id desde el formulario
-
-#         if form.is_valid():
-#             shipment = form.save(commit=False)
-#             shipment.company_id = company_id  # Asignamos el company_id pasado por el formulario
-#             shipment.save()
-#             return redirect('companies:dashboard', company_id=company_id)  # Redirigimos al dashboard de la compañía
-#         else:
-#             return render(request, 'cp-dashboard.html', {'form': form, 'form_errors': True})
-#     else:
-#         form = ShipmentForm()
-
-#     return render(request, 'cp-dashboard.html', {'form': form})

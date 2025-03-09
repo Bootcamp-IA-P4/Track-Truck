@@ -11,6 +11,6 @@ urlpatterns = [
     path('shipments-add/', views.shipmentCreate, name='create_shipment'),
     path('<int:id>/dr-shipments/', views.driverShipments),
     
-
-
+    path('without_driver/', views.shipmentWithoutDriver, name='shipment_without_driver'),
+    path('shipments-add-dashboard/', views.shipmentCreateDashboard, name='create_shipment_dashboard'),
 ]

@@ -144,7 +144,7 @@
             <div class="cp-create-shipments">
                 <h2>Create Shipment</h2>
 
-                <form method="POST" action="{% url 'shipments:create_shipment' %}">
+                <form method="POST" action="{% url 'shipments:create_shipment_dashboard' %}">
                     {% csrf_token %}
                     <input type="hidden" name="company_id" value="{{ company.id }}">
 

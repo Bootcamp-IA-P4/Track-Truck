@@ -105,7 +105,7 @@ def shipmentCreateDashboard(request):
         return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
     
 
-# VISTA PARA SHIPMENTS SIN DRIVER_ID
+# VISTA API PARA SHIPMENTS SIN DRIVER_ID
 @api_view(['GET'])
 def shipmentWithoutDriver(request):
     try:
@@ -120,4 +120,23 @@ def shipmentWithoutDriver(request):
     except Exception as e:
         return Response({"detail": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
+# VISTA PARA ASIGNAR UN DRIVER A UN SHIPMENT
+from django.shortcuts import get_object_or_404
+from django.http import HttpResponseRedirect
+from django.urls import reverse
 
+def shipmentWithoutDriverPage(request):
+    shipments = Shipment.objects.filter(driver_id__isnull=True)
+    
+    return render(request, 'shipments/shipment_without_driver_list.html', {
+        'shipments': shipments,
+        'driver': request.user.driver
+    })
+
+def assignDriverToShipment(request, id, driver_id):
+    shipment = get_object_or_404(Shipment, id=id)
+    
+    shipment.driver_id = driver_id
+    shipment.save()
+    
+    return HttpResponseRedirect(reverse('drivers:driver_dashboard', args=[driver_id]))

@@ -1,4 +1,28 @@
 # Track-Truck 🚚
+<details>
+  <summary>¿Que voy a encontrarme?</summary>
+  <ol>
+    <li>
+      <a href="#¿Qué-es-Track-Truck?">¿Qué es Track Truck?</a>
+      <ul>
+        <li><a href="#Características"> Características</a></li>
+      </ul>
+    </li>
+    <li>
+      <a href="#Tecnologías-Utilizadas">Tecnologías Utilizadas</a></li>
+    <li><a href="#Instalación-y-Configuración">Instalación y Configuración</a></li>
+    <li>
+        <a href="#Uso-de-la-API">Uso de la API</a>
+    <ul>
+        <li><a href="#Autenticación">Autenticación</a></li>
+        <li><a href="#Gestión-de-Empresas">Gestión de Empresas</a></li>
+         <li><a href="#Checklist">Checklist</a></li>
+        <li><a href="#Mi-paso-a-paso">Mi paso a paso</a></li>
+      </ul>
+    </li>
+  </ol>
+</details>
+
 
 ## ¿Qué es Track Truck?
 
@@ -69,34 +93,107 @@ DATABASE_URL="postgres://usuario:contraseña@localhost:5432/nombre_db"
 python manage.py runserver
 ```
 > [!IMPORTANT]
-> La API estará disponible en http://127.0.0.1:8000/
+> La API estará disponible en [http://127.0.0.1:8000/](http://127.0.0.1:8000/)
 
 ## 📌 Uso de la API
 ---
 ## 🔹 Autenticación
 ---
 ### Registro de usuario
-Endpoint: POST /api/auth/register/
+Permite a los usuarios registrarse en la plataforma.
 
-Ejemplo de request:
+Endpoint: POST /users/signin/
+
+Parámetros requeridos (Formulario o JSON)
 ```json
 {
-    "username": "empresa1",
-    "password": "123456",
-    "tipo_usuario": "empresa"
+    "username": "usuario123",
+    "password1": "ContraseñaSegura123",
+    "password2": "ContraseñaSegura123",
+    "email": "usuario@example.com",
+    "user_type": "company"  // Opciones: "company" o "driver"
 }
 ```
+
+> [!NOTE]
+> Flujo de redirección:
+> 
+> * Si el usuario se registra como empresa → Redirige a companies:create_company_form
+>  
+> * Si el usuario se registra como conductor → Redirige a drivers:create_driver_form
+
+
+Ejemplo de respuesta (`200 OK`) ✔️
+```json
+{
+    "message": "Usuario registrado correctamente",
+    "redirect": "/companies/create/"
+}
+
+```
+Ejemplo de posibles errores (`400 Bad Request`) si las contraseñas no coinciden o faltan datos. ❌
+
+---
 ### Inicio de sesión
+Permite a los usuarios iniciar sesión con sus credenciales.
+
 Endpoint: POST /api/auth/login/
 
-Ejemplo de request:
+Parámetros requeridos (Formulario o JSON):
 ```json
 {
-    "username": "empresa1",
-    "password": "123456"
+    "username": "usuario123",
+    "password": "ContraseñaSegura123"
 }
 ```
+
+Ejemplo de respuesta (200 OK). ✔️
+```json
+{
+    "message": "Inicio de sesión exitoso",
+    "redirect": "/home"
+}
+
+```
+
+> Ejemplo de posibles errores ❌ :
+> > `401 Unauthorized` si las credenciales son incorrectas.
+> > 
+> > `400 Bad Request` si faltan datos.
 ---
+### Cierre de sesión
+Cierra la sesión del usuario y lo redirige a la página de inicio de sesión.
+
+Endpoint: GET /users/logout/
+
+Ejemplo de respuesta (`302 Redirect`)
+
+(Redirige a [/users/login/](/users/login/))
+
+---
+### Recuperación de contraseña
+Muestra la página de recuperación de contraseña.
+
+Endpoint: GET /users/forgot-password/
+
+Ejemplo de respuesta (200 OK) ✔️
+(Renderiza la vista [forgot_password.html](forgot_password.html))
+
+
+> [!NOTE]
+>
+> Se utilizan formularios personalizados:
+> 
+> * CustomUserCreationForm para el registro.
+> 
+> * CustomAuthenticationForm para el inicio de sesión.
+> 
+> Se usa auth_login y auth_logout de Django para manejar sesiones.
+> 
+> Se redirige a diferentes vistas según el tipo de usuario registrado.
+
+
+
 ## 🔹 Gestión de Empresas
 ---
 ### Obtener todas las empresas
@@ -104,7 +201,7 @@ Obtiene una lista de todas las empresas registradas.
 
 Endpoint: GET /companies/
 
-Ejemplo de respuesta (`200 OK`)
+Ejemplo de respuesta (`200 OK`). ✔️
 ```json
 [
     {
@@ -127,7 +224,7 @@ Ejemplo de respuesta (`200 OK`)
 ### Crear una empresa
 Crea una nueva empresa en el sistema.
 
-POST /companies/create/
+Endpoint: POST /companies/create/
 
 Parámetros requeridos (JSON)
 ```json
@@ -139,7 +236,7 @@ Parámetros requeridos (JSON)
 }
 ```
 
-Ejemplo de respuesta (`201 Created`)
+Ejemplo de respuesta (`201 Created`). ✔️
 ```json
 {
     "id": 1,
@@ -149,7 +246,7 @@ Ejemplo de respuesta (`201 Created`)
     "phone": "+123456789"
 }
 ```
-Ejemplo de posibles errores (400 Bad Request si falta el campo user_id)
+Ejemplo de posibles errores (`400 Bad Request`) si falta el campo user_id. ❌
 ```json
 {
     "error": "user_id is required"
@@ -159,9 +256,9 @@ Ejemplo de posibles errores (400 Bad Request si falta el campo user_id)
 ### Obtener detalles de una empresa
 Obtiene los detalles de una empresa específica.
 
-GET /companies/{id}/detail/
+Endpoint: GET /companies/{id}/detail/
 
-Ejemplo de respuesta (`200 OK`)
+Ejemplo de respuesta (`200 OK`) ✔️
 ```json
 {
     "id": 1,
@@ -171,7 +268,7 @@ Ejemplo de respuesta (`200 OK`)
     "phone": "+123456789"
 }
 ```
-Ejemplo de posibles errores (`404 Not Found`) si la empresa no existe:
+Ejemplo de posibles errores (`404 Not Found`) si la empresa no existe. ❌
 ```json
 {
     "detail": "Not found."
@@ -181,7 +278,7 @@ Ejemplo de posibles errores (`404 Not Found`) si la empresa no existe:
 ### Actualizar una empresa
  Actualiza todos los datos de una empresa.
  
- PUT /companies/{id}/update/
+ Endpoint: PUT /companies/{id}/update/
 
 Parámetros requeridos (JSON)
 ```json
@@ -194,7 +291,7 @@ Parámetros requeridos (JSON)
 }
 ```
 
- Ejemplo de respuesta (`200 OK`)
+ Ejemplo de respuesta (`200 OK`) ✔️
  ```json
 {
     "id": 1,
@@ -209,7 +306,7 @@ Parámetros requeridos (JSON)
 ### Actualización parcial de una empresa
 Permite actualizar solo algunos campos de la empresa.
 
-PATCH /companies/{id}/update/
+Endpoint: PATCH /companies/{id}/update/
 
 Ejemplo de petición (JSON)
 ```json
@@ -218,7 +315,7 @@ Ejemplo de petición (JSON)
 }
 ```
 
-Ejemplo de respuesta (`200 OK`)
+Ejemplo de respuesta (`200 OK`) ✔️
 ```json
 {
     "id": 1,
@@ -232,32 +329,32 @@ Ejemplo de respuesta (`200 OK`)
 ### Eliminar una empresa
 Elimina una empresa del sistema.
 
-DELETE /companies/{id}/delete/
+Endpoint: DELETE /companies/{id}/delete/
 
-Ejemplo de respuesta (`204 No Content`)
+Ejemplo de respuesta (`204 No Content`) ✔️
 
 (No retorna contenido)
 
 Posibles errores:
 
-`404 Not Found` si la empresa no existe.
+`404 Not Found` si la empresa no existe. ❌
 
 ---
 
 ## Vistas HTML (Interfaz Web)
 1. Crear una empresa desde formulario
-URL: /companies/create/form/{user_id}/
+URL: [/companies/create/form/{user_id}/](/companies/create/form/{user_id}/)
 Muestra un formulario para registrar una empresa.
 
 * Si la empresa se crea correctamente, redirige a home.
 * En caso de error, recarga la página con un mensaje de error.
 
 2. Dashboard de una empresa
-URL: /companies/{id}/cp-dashboard/
+URL: [/companies/{id}/cp-dashboard/](/companies/{id}/cp-dashboard/)
 Muestra los detalles de una empresa y una lista de sus envíos.
 
 3. Actualizar empresa desde formulario
-URL: /companies/{id}/cp-update/
+URL: [/companies/{id}/cp-update/](/companies/{id}/cp-update/)
 Formulario para actualizar los datos de una empresa.
 
 * Si la actualización es exitosa, redirige al dashboard de la empresa.

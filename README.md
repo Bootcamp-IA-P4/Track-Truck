@@ -16,11 +16,11 @@
         <li><a href="#Autenticación">Autenticación</a></li>
         <li><a href="#Gestión-de-Empresas">Gestión de Empresas</a></li>
          <li><a href="#Gestión-de-Conductores">Gestión de Conductores</a></li>
-        <li><a href="#Mi-paso-a-paso">Mi paso a paso</a></li>
+        <li><a href="#Gestión-de-Envíos">Gestión de Envíos</a></li>
       </ul>
     </li>
-     <li><a href="#Tecnologías-Utilizadas">Tecnologías Utilizadas</a></li>
-    <li><a href="#Instalación-y-Configuración">Instalación y Configuración</a></li>
+     <li><a href="#Contribución">Contribución</a></li>
+    <li><a href="#Licencia">Licencia</a></li>
   </ol>
 </details>
 
@@ -520,20 +520,194 @@ Formulario para actualizar los datos de un conductor.
 
 ## 🔹Gestión de Envíos
 ---
-Crear una nueva ruta
-Endpoint: POST /api/rutas/
 
-Ejemplo de request:
+### Crear un envío
+Crea un nuevo envío con los datos proporcionados.
+
+Endpoint: POST /shipments/create/
+
+Parámetros requeridos (JSON):
 ```json
 {
-    "empresa": 1,
-    "camionero": 2,
-    "origen": "Madrid",
-    "destino": "Galicia",
-    "fecha_envio": "2024-03-10",
-    "estado": "pendiente"
+    "company_id": 1,
+    "driver_id": 2,
+    "status": "pending",
+    "created_at": "2025-03-10T12:00:00Z",
+    "finished_at": "2025-03-11T18:00:00Z",
+    "origin": "Ciudad A",
+    "destination": "Ciudad B"
 }
 ```
+
+Ejemplo de respuesta (`200 OK`). ✔️
+```json
+{
+    "id": 10,
+    "company_id": 1,
+    "driver_id": 2,
+    "status": "pending",
+    "created_at": "2025-03-10T12:00:00Z",
+    "finished_at": "2025-03-11T18:00:00Z",
+    "origin": "Ciudad A",
+    "destination": "Ciudad B"
+}
+```
+
+Posibles errores:
+`400 Bad Request` si los datos son inválidos o faltan parámetros requeridos. ❌
+
+---
+
+### Listar todos los envíos
+Devuelve un listado con todos los envíos registrados.
+
+Endpoint: GET /shipments/list/
+
+Ejemplo de respuesta (`200 OK`). ✔️
+```json
+[
+    {
+        "id": 10,
+        "company_id": 1,
+        "driver_id": 2,
+        "status": "pending",
+        "created_at": "2025-03-10T12:00:00Z",
+        "finished_at": "2025-03-11T18:00:00Z",
+        "origin": "Ciudad A",
+        "destination": "Ciudad B"
+    },
+    {
+        "id": 11,
+        "company_id": 2,
+        "driver_id": 3,
+        "status": "in_progress",
+        "created_at": "2025-03-09T15:00:00Z",
+        "finished_at": null,
+        "origin": "Ciudad C",
+        "destination": "Ciudad D"
+    }
+]
+```
+Posibles errores: `400 Bad Request` en caso de fallo inesperado en la consulta. ❌
+
+---
+
+### Listar envíos por empresa
+Obtiene todos los envíos asociados a una empresa específica.
+
+Endpoint: GET /shipments/{company_id}/company-shipments/
+
+Parámetros de la URL:
+
+`company_id`: ID de la empresa.
+
+Ejemplo de respuesta (200 OK). ✔️
+```json
+[
+    {
+        "id": 10,
+        "company_id": 1,
+        "driver_id": 2,
+        "status": "pending",
+        "created_at": "2025-03-10T12:00:00Z",
+        "finished_at": "2025-03-11T18:00:00Z",
+        "origin": "Ciudad A",
+        "destination": "Ciudad B"
+    }
+]
+```
+
+Posibles errores: ❌
+
+* `404 Not Found` si la empresa no tiene envíos.
+* `400 Bad Request` en caso de error interno.
+---
+
+### Listar envíos por conductor
+Obtiene todos los envíos asignados a un conductor específico.
+
+Endpoint: GET /shipments/{driver_id}/driver-shipments/
+
+Parámetros de la URL:
+
+`driver_id`: ID del conductor.
+
+Ejemplo de respuesta (`200 OK`). ✔️
+```json
+[
+    {
+        "id": 11,
+        "company_id": 2,
+        "driver_id": 3,
+        "status": "in_progress",
+        "created_at": "2025-03-09T15:00:00Z",
+        "finished_at": null,
+        "origin": "Ciudad C",
+        "destination": "Ciudad D"
+    }
+]
+```
+
+Posibles errores: ❌
+
+* `404 Not Found` si el conductor no tiene envíos asignados.
+* `400 Bad Request` en caso de error interno.
+
+---
+
+### Actualizar un envío
+Actualiza la información de un envío existente.
+
+Endpoint: PUT /shipments/update/
+
+Parámetros requeridos (JSON):
+```json
+{
+    "id": 10,
+    "status": "completed",
+    "finished_at": "2025-03-11T20:00:00Z"
+}
+```
+
+Ejemplo de respuesta (`200 OK`). ✔️
+```json
+{
+    "id": 10,
+    "company_id": 1,
+    "driver_id": 2,
+    "status": "completed",
+    "created_at": "2025-03-10T12:00:00Z",
+    "finished_at": "2025-03-11T20:00:00Z",
+    "origin": "Ciudad A",
+    "destination": "Ciudad B"
+}
+```
+
+Posibles errores: `400 Bad Request` si los datos son inválidos o falta el ID del envío. ❌
+
+---
+
+### Eliminar un envío
+Elimina un envío existente de la base de datos.
+
+Endpoint: DELETE /shipments/delete/
+
+Ejemplo de respuesta (`200 OK`)
+```json
+{
+    "message": "Shipment deleted"
+}
+```
+Posibles errores: `400 Bad Request` si ocurre un error durante la eliminación. ❌
+
+---
+
+> [!NOTE]
+> * Los datos se manejan a través del serializador ShipmentSerializer.
+>   
+> * Se implementan métodos HTTP estándar: POST (crear), GET (consultar), PUT (actualizar) y DELETE (eliminar).
+
+---
 
 ## 🤝 Contribución  
 

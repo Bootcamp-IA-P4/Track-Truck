@@ -143,7 +143,13 @@ Ejemplo de respuesta (`200 OK`) ✔️
 }
 
 ```
-Ejemplo de posibles errores (`400 Bad Request`) si las contraseñas no coinciden o faltan datos. ❌
+Ejemplo de posibles errores:
+
+(`400 Bad Request`) si las contraseñas no coinciden o faltan datos. ❌
+
+> [!IMPORTANT]
+> (`400 Bad Request`) si se registra un usuario con el mismo email/username,  un driver con el mismo truck plate, una empresa con el mismo nombre.
+> Estas validaciones son personalizadas
 
 ---
 ### Inicio de sesión

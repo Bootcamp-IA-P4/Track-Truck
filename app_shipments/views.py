@@ -159,3 +159,15 @@ def assign_driver_to_shipment(request, shipment_id):
     shipment.save()
 
     return redirect('drivers:driver_dashboard', id=driver.id)
+
+
+@login_required(login_url='login')
+@api_view(['POST'])
+def shipmentDelete(request, id):
+    shipment = get_object_or_404(Shipment, id=id)
+
+    if shipment.driver_id is None:  # Solo permitir eliminar si no tiene driver
+        shipment.delete()
+        return redirect('companies:company_dashboard', id=shipment.company_id)
+
+    return Response({"error": "Cannot delete a shipment with a driver assigned."}, status=status.HTTP_400_BAD_REQUEST)

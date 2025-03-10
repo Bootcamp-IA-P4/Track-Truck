@@ -1,5 +1,5 @@
 from django.test import TestCase
-from .models import Shipment
+from ..models import Shipment
 from django.utils import timezone
 
 # filepath: /c:/Users/Fernando/VSC/python/Track-Truck/app_shipments/test_models.py

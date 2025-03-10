@@ -1,8 +1,8 @@
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase, APIClient
-from .models import Shipment
-from .serializer import ShipmentSerializer
+from ..models import Shipment
+from ..serializer import ShipmentSerializer
 
 class ShipmentTests(APITestCase):
 

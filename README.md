@@ -8,18 +8,19 @@
         <li><a href="#Características"> Características</a></li>
       </ul>
     </li>
-    <li>
-      <a href="#Tecnologías-Utilizadas">Tecnologías Utilizadas</a></li>
+    <li><a href="#Tecnologías-Utilizadas">Tecnologías Utilizadas</a></li>
     <li><a href="#Instalación-y-Configuración">Instalación y Configuración</a></li>
     <li>
         <a href="#Uso-de-la-API">Uso de la API</a>
     <ul>
         <li><a href="#Autenticación">Autenticación</a></li>
         <li><a href="#Gestión-de-Empresas">Gestión de Empresas</a></li>
-         <li><a href="#Checklist">Checklist</a></li>
+         <li><a href="#Gestión-de-Conductores">Gestión de Conductores</a></li>
         <li><a href="#Mi-paso-a-paso">Mi paso a paso</a></li>
       </ul>
     </li>
+     <li><a href="#Tecnologías-Utilizadas">Tecnologías Utilizadas</a></li>
+    <li><a href="#Instalación-y-Configuración">Instalación y Configuración</a></li>
   </ol>
 </details>
 
@@ -192,7 +193,7 @@ Ejemplo de respuesta (200 OK) ✔️
 > 
 > Se redirige a diferentes vistas según el tipo de usuario registrado.
 
-
+---
 
 ## 🔹 Gestión de Empresas
 ---
@@ -367,7 +368,158 @@ Formulario para actualizar los datos de una empresa.
 >
 > * La API usa requests para realizar llamadas internas a otros servicios.
 
-### 🔹 Gestión de Rutas
+--- 
+## 🔹Gestión de Conductores
+---
+
+### Obtener todos los conductores
+Obtiene una lista de todos los conductores registrados.
+
+Endpoint: GET /drivers/
+
+Ejemplo de respuesta (`200 OK`). ✔️
+```json
+[
+    {
+        "id": 1,
+        "name": "Juan Pérez",
+        "truck_plate": "XYZ123",
+        "phone": "+123456789",
+        "user": 101
+    },
+    {
+        "id": 2,
+        "name": "Ana López",
+        "truck_plate": "ABC987",
+        "phone": "+987654321",
+        "user": 102
+    }
+]
+```
+---
+
+### Crear un nuevo conductor
+Registra un nuevo conductor en el sistema.
+
+Endpoint: POST /drivers/create/
+
+Parámetros requeridos (JSON):
+```json
+{
+    "user": 101,
+    "name": "Juan Pérez",
+    "truck_plate": "XYZ123",
+    "phone": "+123456789"
+}
+```
+Ejemplo de respuesta (`201 Created`)
+```json
+{
+    "id": 1,
+    "user": 101,
+    "name": "Juan Pérez",
+    "truck_plate": "XYZ123",
+    "phone": "+123456789"
+}
+```
+Posibles errores ❌:
+
+`400 Bad Request` si los datos son incorrectos.
+
+---
+
+### Obtener detalles de un conductor
+Obtiene la información de un conductor específico.
+
+Endpoint: GET /drivers/{id}/detail/
+
+Ejemplo de respuesta (`200 OK`). ✔️
+```json
+{
+    "id": 1,
+    "user": 101,
+    "name": "Juan Pérez",
+    "truck_plate": "XYZ123",
+    "phone": "+123456789"
+}
+```
+Posibles errores `404 Not Found` si el conductor no existe. ❌
+```json
+{
+    "detail": "Not found."
+}
+```
+---
+
+### Actualizar un conductor
+ Modifica todos los datos de un conductor.
+
+ Endpoint: PUT /drivers/{id}/update/
+
+ Parámetros requeridos (JSON):
+ ```json
+{
+    "name": "Juan Pérez",
+    "truck_plate": "XYZ789",
+    "phone": "+000000000",
+    "user": 101
+}
+```
+
+Ejemplo de respuesta (`200 OK`) ✔️
+```json
+{
+    "id": 1,
+    "user": 101,
+    "name": "Juan Pérez",
+    "truck_plate": "XYZ789",
+    "phone": "+000000000"
+}
+```
+
+---
+
+### Eliminar un conductor
+Borra un conductor del sistema.
+
+Endpoint: DELETE /drivers/{id}/delete/
+
+Ejemplo de respuesta (`204 No Content`)
+
+(No retorna contenido)
+
+Posibles errores `404 Not Found` si el conductor no existe. ❌
+
+---
+
+### Vistas HTML (Interfaz Web)
+1. Crear un conductor desde formulario
+URL: [/drivers/create/form/{user_id}/](/drivers/create/form/{user_id}/)
+Muestra un formulario para registrar un conductor.
+
+* Si el conductor se crea correctamente, redirige a home.
+* En caso de error, recarga la página con un mensaje de error.
+  
+2. Dashboard de un conductor
+URL: [/drivers/{id}/dr-dashboard/](/drivers/{id}/dr-dashboard/)
+Muestra los detalles de un conductor y una lista de sus envíos.
+
+3. Actualizar conductor desde formulario
+URL: [/drivers/{id}/dr-update/](/drivers/{id}/dr-update/)
+Formulario para actualizar los datos de un conductor.
+
+* Si la actualización es exitosa, redirige al dashboard del conductor.
+* Si hay un error, muestra un mensaje en la página.
+
+> [!NOTE]
+> * Se utiliza requests para hacer llamadas a la API desde las vistas HTML.
+>   
+> * Se manejan fechas en formato YYYY-MM-DD HH:MM.
+>   
+> * La API devuelve errores detallados en caso de problemas con las solicitudes.
+
+## 🔹Gestión de Envíos
+---
 Crear una nueva ruta
 Endpoint: POST /api/rutas/
 

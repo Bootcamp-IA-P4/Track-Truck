@@ -8,6 +8,7 @@ import requests
 from datetime import datetime
 import json
 from django.db.models import Q
+from django.contrib.auth.decorators import login_required
 
 # Obtener todos los conductores
 @api_view(['GET'])
@@ -70,7 +71,7 @@ def create_driver_form(request, user_id):
 
 # VISTAS QUE LLAMAN A LA API Y DEVUELVEN HTMLS
 
-
+@login_required(login_url='login')
 def driver_dashboard(request, id):
     driver = get_object_or_404(Driver, id=id)
     
@@ -91,6 +92,7 @@ def driver_dashboard(request, id):
         'shipments': shipments
     })
 
+@login_required(login_url='login')
 def update_driver(request, id):
     # URL para obtener los datos del conductor
     api_url = f"http://127.0.0.1:8000/drivers/{id}/detail/"

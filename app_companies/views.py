@@ -6,6 +6,8 @@ from .serializers import CompanySerializer
 from rest_framework import status
 import logging
 from django.db.models import Q
+from django.contrib.auth.decorators import login_required
+
 
 logger = logging.getLogger('app_companies')
 
@@ -120,7 +122,7 @@ from django.shortcuts import redirect, get_object_or_404
 from app_companies.models import Company
 from datetime import datetime
 
-
+@login_required(login_url='login')
 def company_dashboard(request, id):
     company = get_object_or_404(Company, id=id)
     
@@ -142,7 +144,7 @@ def company_dashboard(request, id):
     })
 
 
-
+@login_required(login_url='login')
 def update_company(request, id):
     api_url = f"http://127.0.0.1:8000/companies/{id}/detail/"
     response = requests.get(api_url)

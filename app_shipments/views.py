@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework import status
 from .models import Shipment
+from django.contrib.auth.decorators import login_required
 
 
 @api_view(['POST']) #CREATE
@@ -72,7 +73,7 @@ def shipmentUpdate(request):
         return Response(serializer._errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-
+@login_required(login_url='login')
 @api_view(['DELETE'])
 def shipmentDelete():
     try:
@@ -83,6 +84,7 @@ def shipmentDelete():
 
 
 # VISTA PARA CREAR SHIPMENT DESDE DASHBOARD
+@login_required(login_url='login')
 @api_view(['POST']) 
 def shipmentCreateDashboard(request):
     try:
@@ -128,7 +130,7 @@ def shipmentWithoutDriver(request):
         return Response({"detail": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 # VISTA PARA ASIGNAR UN DRIVER A UN SHIPMENT
-
+@login_required(login_url='login')
 def shipmentWithoutDriverPage(request):
     shipments = Shipment.objects.filter(driver_id__isnull=True)
 
@@ -141,9 +143,8 @@ def shipmentWithoutDriverPage(request):
         'driver': driver
     })
 
-from django.contrib.auth.decorators import login_required
 
-@login_required
+@login_required(login_url='login')
 def assign_driver_to_shipment(request, shipment_id):
     try:
         driver = request.user.driver

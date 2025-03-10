@@ -8,6 +8,8 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib import messages
 from django.core.exceptions import PermissionDenied
+from django.contrib.auth.decorators import login_required
+
 
 # def custom_permission_denied_view(request, exception):
 #     return render(request, '403.html', status=403)

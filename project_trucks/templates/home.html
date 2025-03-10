@@ -1,44 +1,41 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Sign in</title>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Track Truck</title>
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
 
-    <link rel="stylesheet" href="{% static 'css/home.css' %}" />
-  </head>
-  <body>
-    <section class="form-login">
-      <h5>Account</h5>
-      <input
-        class="controls"
-        type="text"
-        name="email"
-        value=""
-        placeholder="Email"
-      />
-      <input
-        class="controls"
-        type="password"
-        name="Password"
-        value=""
-        placeholder="Password"
-      />
-      <form>
-        <label for="rol">Select an option:</label>
-        <select id="rol" name="rol">
-          <optgroup label="--Select--">
-            <option value="Companies">Companies</option>
-            <option value="Drivers">Drivers</option>
-          </optgroup>
-        </select>
+    <link rel="icon" type="image/x-icon" href="{% static 'images/favicon.ico' %}">
 
-        <input class="buttons" type="submit" value="Login" />
-      </form>
+</head>
+<body>
 
-      <p><a href="/app_users/Templates/users/forgot_password.html">¿Forgot your Password?</a></p>
-      <p><a href="/app_users/Templates/users/login.html">Register</a></p>
-    </section>
-  </body>
+    <div class="container">
+        <div id="imagenContenedor">
+            <img src="{% static 'images/camion2.webp' %}" alt="Imagen de la izquierda">
+        </div>
+
+        <div id="contenido">
+            <div class="logo-container">
+                <img src="{% static 'images/TT3.png' %}" alt="Imagen de la izquierda">
+            </div>
+
+            <h2>Welcome to Track Truck</h2>
+            <p>Please login or signin</p>
+
+        
+            <div class="button-container">
+                {% url 'login' as login_url %}
+                <button onclick="window.location.href='{{ login_url }}'">Login</button>
+
+                {% url 'signin' as signin_url %}
+                <button onclick="window.location.href='{{ signin_url }}'">Signin</button>
+            </div>
+        
+        </div>
+    </div>
+
+</body>
 </html>

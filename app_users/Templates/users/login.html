@@ -1,76 +1,88 @@
+{% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Register</title>
-  {% load static %}
-  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+
+    <link rel="icon" type="image/x-icon" href="{% static 'images/favicon.ico' %}">
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            background-color: #fff9eb;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .login-container {
+            font-family: 'Tahoma', sans-serif;
+            font-size: 1.1rem;
+            width: 100%;
+            max-width: 400px;
+            background: #fbdc8c;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+        .btn-primary {
+            width: 100%;
+            background-color: #903610;
+            border: #903610;
+        }
+        .form-error {
+            color: red;
+            font-size: 0.9rem;
+        }
+        .form-control {
+            background-color: #fff9eb;
+            border: #fff9eb;
+        }
+        .text-center {
+            margin-bottom: 20px;
+        }
+        input::placeholder {
+            color: #903610;
+        }
+    </style>
 </head>
 <body>
-  <section class="form-register">
-    <h4>Register Form</h4>
-    
-    <form method="post" action="{% url 'signin' %}">
-      {% csrf_token %}
 
-      <input class="controls" type="text" name="username" id="username" placeholder="Enter your Username" required>
-      <input class="controls" type="email" name="email" id="email" placeholder="Enter your Email" required>
-      <input class="controls" type="number" name="phone" id="phone" placeholder="Enter your Phone Number" required>
-      <input class="controls" type="password" name="password" id="password" placeholder="Enter your Password" required>
+<div class="login-container">
+    <h2 class="text-center">LOGIN</h2>
 
-      <label for="user_type">Register as:</label>
-      <select class="controls" id="user_type" name="user_type" required>
-          <option value="" disabled selected>-- Select --</option>
-          <option value="company">Company</option>
-          <option value="driver">Driver</option>
-      </select>
+    <form method="post">
+        {% csrf_token %}
 
-      <input class="controls hidden" type="text" name="company_name" id="company_name" placeholder="Enter Company Name">
-      <input class="controls hidden" type="text" name="company_address" id="company_address" placeholder="Enter Company Address">
-      <input class="controls hidden" type="text" name="license_number" id="license_number" placeholder="Enter License Number">
+        <div class="mb-3">
+            <label for="{{ form.username.id_for_label }}" class="form-label">Email</label>
+            <input type="email" name="username" id="{{ form.username.id_for_label }}" 
+                   class="form-control" placeholder="Enter your email" required>
+            {% if form.username.errors %}
+                <div class="form-error">{{ form.username.errors.0 }}</div>
+            {% endif %}
+        </div>
 
-      <p>I agree with <a href="#">Terms and Conditions</a></p>
+        <div class="mb-3">
+            <label for="{{ form.password.id_for_label }}" class="form-label">Password</label>
+            <input type="password" name="password" id="{{ form.password.id_for_label }}" 
+                   class="form-control" placeholder="Enter your password" required>
+            {% if form.password.errors %}
+                <div class="form-error">{{ form.password.errors.0 }}</div>
+            {% endif %}
+        </div>
 
-      <input class="botons" type="submit" value="Register">
-      
-      <p><a href="{% url 'login' %}">Already have an account?</a></p>
+        <button type="submit" class="btn btn-primary">Login</button>
     </form>
-  </section>
 
-  <script>
-    document.getElementById('user_type').addEventListener('change', function() {
-        let companyField = document.getElementById('company_name');
-        let companyAddressField = document.getElementById('company_address');
-        let driverField = document.getElementById('license_number');
-        let phoneField = document.getElementById('phone');
+    <p class="text-center mt-3">
+        ¿You dont have an account? <a href="{% url 'signin' %}">Sign here</a>
+    </p>
+</div>
 
-        if (this.value === "company") {
-            companyField.classList.remove('hidden');
-            companyField.required = true;
-            companyAddressField.classList.remove('hidden');
-            companyAddressField.required = true;
-            driverField.classList.add('hidden');
-            driverField.required = false;
-            phoneField.required = true;
-        } else if (this.value === "driver") {
-            driverField.classList.remove('hidden');
-            driverField.required = true;
-            companyField.classList.add('hidden');
-            companyField.required = false;
-            companyAddressField.classList.add('hidden');
-            companyAddressField.required = false;
-            phoneField.required = true;
-        } else {
-            companyField.classList.add('hidden');
-            companyField.required = false;
-            companyAddressField.classList.add('hidden');
-            companyAddressField.required = false;
-            driverField.classList.add('hidden');
-            driverField.required = false;
-            phoneField.required = true;
-        }
-    });
-  </script>
 </body>
 </html>

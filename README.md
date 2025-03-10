@@ -713,19 +713,24 @@ Posibles errores: `400 Bad Request` si ocurre un error durante la eliminación. 
 
 ¡Las contribuciones son bienvenidas! Para contribuir:  
 
-1. Haz un fork del repositorio.  
-2. Crea una nueva rama:  
+1. Haz un fork del repositorio.
+   
+3. Crea una nueva rama:
+    
    ```sh
    git checkout -b feature/nueva-funcionalidad
    ```
-3. Realiza tus cambios y haz commit:
+   
+4. Realiza tus cambios y haz commit:
+   
   ```sh
 git commit -m "Añadir nueva funcionalidad"
 ```
 
 4. Envía un pull request 🚀.
+   
 ---
 ## 📜 Licencia
 Este proyecto está bajo la licencia MIT. Puedes ver más detalles en el archivo LICENSE
 ---
-# 🚀 ¡Gracias por usar Track-Truck! Si tienes preguntas, crea un issue en el repositorio o contáctanos.
+## 🚀 ¡Gracias por usar Track-Truck! Si tienes preguntas, crea un issue en el repositorio o contáctanos.

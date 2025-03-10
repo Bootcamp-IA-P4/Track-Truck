@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .serializer import ShipmentSerializer
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
@@ -128,9 +128,6 @@ def shipmentWithoutDriver(request):
         return Response({"detail": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 # VISTA PARA ASIGNAR UN DRIVER A UN SHIPMENT
-from django.shortcuts import get_object_or_404
-from django.http import HttpResponseRedirect
-from django.urls import reverse
 
 def shipmentWithoutDriverPage(request):
     shipments = Shipment.objects.filter(driver_id__isnull=True)
@@ -144,11 +141,20 @@ def shipmentWithoutDriverPage(request):
         'driver': driver
     })
 
+from django.contrib.auth.decorators import login_required
 
-def assignDriverToShipment(request, id, driver_id):
-    shipment = get_object_or_404(Shipment, id=id)
+@login_required
+def assign_driver_to_shipment(request, shipment_id):
+    try:
+        driver = request.user.driver
+    except AttributeError:
+        return redirect('some_error_page')
+    shipment = get_object_or_404(Shipment, id=shipment_id)
+
+    if shipment.driver_id is not None:
+        return redirect('shipments:shipment_without_driver')
     
-    shipment.driver_id = driver_id
+    shipment.driver_id = driver.id
     shipment.save()
-    
-    return HttpResponseRedirect(reverse('drivers:driver_dashboard', args=[driver_id]))
+
+    return redirect('drivers:driver_dashboard', id=driver.id)

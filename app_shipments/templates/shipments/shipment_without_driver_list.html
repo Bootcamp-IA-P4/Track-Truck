@@ -48,11 +48,15 @@
                                 <td>{{ shipment.origin }}</td>
                                 <td>{{ shipment.destination }}</td>
                                 <td>{{ shipment.created_at }}</td>
-                                {% comment %} <td>
+                                <td>
+                                {% if driver %}
                                     <a href="{% url 'shipments:assign_driver_to_shipment' shipment.id %}">
                                         <button>Assign to me</button>
                                     </a>
-                                </td> {% endcomment %}
+                                {% else %}
+                                    <p>You are not a driver, please log in as a driver to assign shipments.</p>
+                                {% endif %}
+                                </td>
                             </tr>
                         {% endfor %}
                     </tbody>

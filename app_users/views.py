@@ -8,6 +8,8 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib import messages
 from django.core.exceptions import PermissionDenied
+from django.contrib.auth.decorators import login_required
+
 
 # def custom_permission_denied_view(request, exception):
 #     return render(request, '403.html', status=403)
@@ -61,12 +63,12 @@ def login_view(request):
 
             if user.user_type == 'company':
                 company = user.companies.first()
-                return redirect('companies:company_dashboard', company.id)
+                return redirect('companies:company_dashboard', id=company.id)
             elif user.user_type == 'driver':
                 driver = user.driver
                 return redirect('drivers:driver_dashboard', id=driver.id)
             else:
-                return redirect('home')
+                return redirect('login')
     else:
         form = CustomAuthenticationForm()
 
@@ -75,6 +77,3 @@ def login_view(request):
 def logout_view(request):
     auth_logout(request)
     return redirect('login')
-
-def forgot_password(request):
-    return render(request, 'forgot_password.html')

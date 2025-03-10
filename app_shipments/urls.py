@@ -1,5 +1,7 @@
 from django.urls import path
 from . import views
+from .views import shipmentDelete
+
 
 app_name = 'shipments'
 
@@ -19,5 +21,7 @@ urlpatterns = [
 
     # Ruta para asignar un shipment a un conductor
     path('<int:shipment_id>/assign-driver/', views.assign_driver_to_shipment, name='assign_driver_to_shipment'),
+
+    path('delete/<int:id>/', shipmentDelete, name='shipment_delete'),
 
 ]

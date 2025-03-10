@@ -46,11 +46,11 @@ def signin(request):
 #     if request.method == 'POST':
 
 
-            auth_login(request, user)
-            return redirect('home')
-    else:
-        form = CustomUserCreationForm
-    return render(request, 'users/signin.html', {'form': form})
+    #         auth_login(request, user)
+    #         return redirect('home')
+    # else:
+    #     form = CustomUserCreationForm
+    # return render(request, 'users/signin.html', {'form': form})
 
 
 def login_view(request):

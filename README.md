@@ -72,8 +72,8 @@ python manage.py runserver
 > La API estará disponible en http://127.0.0.1:8000/
 
 ## 📌 Uso de la API
-
-### 🔹 Autenticación
+---
+## 🔹 Autenticación
 ---
 ### Registro de usuario
 Endpoint: POST /api/auth/register/
@@ -97,22 +97,179 @@ Ejemplo de request:
 }
 ```
 ---
-### 🔹 Gestión de Empresas
+## 🔹 Gestión de Empresas
 ---
 ### Obtener todas las empresas
-Endpoint: GET /api/empresas/
+Obtiene una lista de todas las empresas registradas.
 
-Ejemplo de respuesta:
+Endpoint: GET /companies/
+
+Ejemplo de respuesta (`200 OK`)
 ```json
 [
     {
         "id": 1,
-        "nombre": "Empresa Logística S.A.",
-        "direccion": "Madrid, España",
-        "telefono": "+34 600 123 456"
+        "name": "Empresa XYZ",
+        "email": "contacto@xyz.com",
+        "phone": "+123456789",
+        "user_id": 101
+    },
+    {
+        "id": 2,
+        "name": "Empresa ABC",
+        "email": "info@abc.com",
+        "phone": "+987654321",
+        "user_id": 102
     }
 ]
 ```
+---
+### Crear una empresa
+Crea una nueva empresa en el sistema.
+
+POST /companies/create/
+
+Parámetros requeridos (JSON)
+```json
+{
+    "user_id": 101,
+    "name": "Empresa XYZ",
+    "email": "contacto@xyz.com",
+    "phone": "+123456789"
+}
+```
+
+Ejemplo de respuesta (`201 Created`)
+```json
+{
+    "id": 1,
+    "user_id": 101,
+    "name": "Empresa XYZ",
+    "email": "contacto@xyz.com",
+    "phone": "+123456789"
+}
+```
+Ejemplo de posibles errores (400 Bad Request si falta el campo user_id)
+```json
+{
+    "error": "user_id is required"
+}
+```
+---
+### Obtener detalles de una empresa
+Obtiene los detalles de una empresa específica.
+
+GET /companies/{id}/detail/
+
+Ejemplo de respuesta (`200 OK`)
+```json
+{
+    "id": 1,
+    "user_id": 101,
+    "name": "Empresa XYZ",
+    "email": "contacto@xyz.com",
+    "phone": "+123456789"
+}
+```
+Ejemplo de posibles errores (`404 Not Found`) si la empresa no existe:
+```json
+{
+    "detail": "Not found."
+}
+```
+---
+### Actualizar una empresa
+ Actualiza todos los datos de una empresa.
+ 
+ PUT /companies/{id}/update/
+
+Parámetros requeridos (JSON)
+```json
+{
+    "name": "Empresa Actualizada",
+    "email": "nuevo@email.com",
+    "phone": "+000000000",
+    "address": "Calle 123",
+    "user_id": 101
+}
+```
+
+ Ejemplo de respuesta (`200 OK`)
+ ```json
+{
+    "id": 1,
+    "user_id": 101,
+    "name": "Empresa Actualizada",
+    "email": "nuevo@email.com",
+    "phone": "+000000000",
+    "address": "Calle 123"
+}
+```
+---
+### Actualización parcial de una empresa
+Permite actualizar solo algunos campos de la empresa.
+
+PATCH /companies/{id}/update/
+
+Ejemplo de petición (JSON)
+```json
+{
+    "phone": "+111111111"
+}
+```
+
+Ejemplo de respuesta (`200 OK`)
+```json
+{
+    "id": 1,
+    "user_id": 101,
+    "name": "Empresa XYZ",
+    "email": "contacto@xyz.com",
+    "phone": "+111111111"
+}
+```
+---
+### Eliminar una empresa
+Elimina una empresa del sistema.
+
+DELETE /companies/{id}/delete/
+
+Ejemplo de respuesta (`204 No Content`)
+
+(No retorna contenido)
+
+Posibles errores:
+
+`404 Not Found` si la empresa no existe.
+
+---
+
+## Vistas HTML (Interfaz Web)
+1. Crear una empresa desde formulario
+URL: /companies/create/form/{user_id}/
+Muestra un formulario para registrar una empresa.
+
+* Si la empresa se crea correctamente, redirige a home.
+* En caso de error, recarga la página con un mensaje de error.
+
+2. Dashboard de una empresa
+URL: /companies/{id}/cp-dashboard/
+Muestra los detalles de una empresa y una lista de sus envíos.
+
+3. Actualizar empresa desde formulario
+URL: /companies/{id}/cp-update/
+Formulario para actualizar los datos de una empresa.
+
+* Si la actualización es exitosa, redirige al dashboard de la empresa.
+* Si hay un error, muestra un mensaje en la página.
+
+>[!NOTE]
+> * Se utiliza logging para registrar eventos (creación, actualización, eliminación, etc.).
+>
+> * Se manejan fechas en formato YYYY-MM-DD HH:MM.
+>
+> * La API usa requests para realizar llamadas internas a otros servicios.
+
 ### 🔹 Gestión de Rutas
 Crear una nueva ruta
 Endpoint: POST /api/rutas/

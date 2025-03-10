@@ -64,12 +64,12 @@ def login_view(request):
 
             if user.user_type == 'company':
                 company = user.companies.first()
-                return redirect('companies:company_dashboard', company.id)
+                return redirect('companies:company_dashboard', id=company.id)
             elif user.user_type == 'driver':
                 driver = user.driver
                 return redirect('drivers:driver_dashboard', id=driver.id)
             else:
-                return redirect('home')
+                return redirect('login')
     else:
         form = CustomAuthenticationForm()
 

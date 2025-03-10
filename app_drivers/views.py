@@ -57,14 +57,20 @@ def create_driver_form(request, user_id):
             'phone': request.POST.get('phone')
         }
         response = requests.post('http://localhost:8000/drivers/create/', json=driver_data)
+        
         if response.status_code == 201:
-            return redirect('home')  # Redirect on success
+            driver_id = response.json().get('id')
+            
+            if driver_id:
+                return redirect('drivers:driver_dashboard', id=driver_id)
+            else:
+                return redirect('home')
         else:
             try:
-                error_message = response.json().get('error', 'Error creating driver')  # Extract error from API response
+                error_message = response.json().get('error', 'Error creating driver')  # Extraer el mensaje de error de la respuesta JSON
             except:
-                error_message = 'Error creating driver'  # Generic error if JSON parsing fails
-            
+                error_message = 'Error creating driver'
+
             return render(request, 'app_drivers/create_driver.html', {'error': error_message, 'user_id': user_id})
     else:
         return render(request, 'app_drivers/create_driver.html', {'user_id': user_id})

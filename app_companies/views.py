@@ -100,11 +100,17 @@ def create_company_form(request, user_id):
             'address': request.POST.get('address'),
         }
         response = requests.post('http://localhost:8000/companies/create/', json=company_data)
+        
         if response.status_code == 201:
-            return redirect('home')
+            company_id = response.json().get('id')
+            
+            if company_id:
+                return redirect('companies:company_dashboard', id=company_id)
+            else:
+                return redirect('home')
         else:
             try:
-                error_message = response.json().get('error', 'Error creating company')  # Extract the error message from the JSON response
+                error_message = response.json().get('error', 'Error creating company')  # Extraer el mensaje de error de la respuesta JSON
             except:
                 error_message = 'Error creating company'
 

@@ -98,6 +98,18 @@ python manage.py runserver
 
 ## 📌 Uso de la API
 ---
+> [!NOTE]
+> Si quieres ver esto de forma más visual visita:
+>
+> Swagger UI: http://localhost:8000/docs/
+> 
+> ![docs](https://github.com/Bootcamp-IA-P4/Track-Truck/blob/docs/readme/static/images/docs-swagger-_1_.gif)
+> 
+> Redoc UI: http://localhost:8000/redoc/
+> 
+>  ![redoc](https://github.com/Bootcamp-IA-P4/Track-Truck/blob/docs/readme/static/images/redoc-swagger-_1_.gif)
+
+
 ## 🔹 Autenticación
 ---
 ### Registro de usuario

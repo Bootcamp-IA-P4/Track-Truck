@@ -1,8 +1,9 @@
 from django.urls import path
 from .import views
-from app_shipments import views as shipments_views
+from app_shipments import views as shipments_views # ? creo que hay que borrar
 
 app_name = 'drivers'
+
 urlpatterns = [
     path("", views.get_all_drivers, name="get_all_drivers"),
     path("create/", views.create_driver, name="create_driver"),
@@ -14,5 +15,4 @@ urlpatterns = [
     # VISTAS HTML
     path('<int:id>/dr-dashboard/', views.driver_dashboard, name='driver_dashboard'),
     path('<int:id>/dr-update/', views.update_driver, name='update_driver'),
-
 ]

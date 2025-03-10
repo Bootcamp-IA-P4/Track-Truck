@@ -8,6 +8,7 @@ import requests
 from datetime import datetime
 import json
 from django.db.models import Q
+from django.contrib.auth.decorators import login_required
 
 # Obtener todos los conductores
 @api_view(['GET'])
@@ -56,21 +57,27 @@ def create_driver_form(request, user_id):
             'phone': request.POST.get('phone')
         }
         response = requests.post('http://localhost:8000/drivers/create/', json=driver_data)
+        
         if response.status_code == 201:
-            return redirect('home')  # Redirect on success
+            driver_id = response.json().get('id')
+            
+            if driver_id:
+                return redirect('drivers:driver_dashboard', id=driver_id)
+            else:
+                return redirect('home')
         else:
             try:
-                error_message = response.json().get('error', 'Error creating driver')  # Extract error from API response
+                error_message = response.json().get('error', 'Error creating driver')  # Extraer el mensaje de error de la respuesta JSON
             except:
-                error_message = 'Error creating driver'  # Generic error if JSON parsing fails
-            
+                error_message = 'Error creating driver'
+
             return render(request, 'app_drivers/create_driver.html', {'error': error_message, 'user_id': user_id})
     else:
         return render(request, 'app_drivers/create_driver.html', {'user_id': user_id})
 
 # VISTAS QUE LLAMAN A LA API Y DEVUELVEN HTMLS
 
-
+@login_required(login_url='login')
 def driver_dashboard(request, id):
     driver = get_object_or_404(Driver, id=id)
     
@@ -91,6 +98,7 @@ def driver_dashboard(request, id):
         'shipments': shipments
     })
 
+@login_required(login_url='login')
 def update_driver(request, id):
     # URL para obtener los datos del conductor
     api_url = f"http://127.0.0.1:8000/drivers/{id}/detail/"

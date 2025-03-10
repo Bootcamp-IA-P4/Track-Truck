@@ -6,10 +6,10 @@ from .serializers import CompanySerializer
 from rest_framework import status
 import logging
 from django.db.models import Q
+from django.contrib.auth.decorators import login_required
+
 
 logger = logging.getLogger('app_companies')
-
-# Create your views here.
 
 @api_view(['GET'])
 def getAllCompanies(request):
@@ -18,30 +18,14 @@ def getAllCompanies(request):
     serializer = CompanySerializer(companies, many=True)
     return Response(serializer.data)
 
-# @api_view(['POST'])
-# def createCompany(request):
-#     serializer = CompanySerializer(data=request.data)
-#     if serializer.is_valid():
-#         serializer.save()
-#         return Response(serializer.data, status=status.HTTP_201_CREATED)
-#     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['POST'])
 def createCompany(request):
     logger.debug('Creating a company')
-    data = request.data.copy()
-    user_id = data.pop('user_id', None)
-    
-    if user_id is None:
-        return Response({"error": "user_id is required"}, status=status.HTTP_400_BAD_REQUEST)
-    
-    data['user_id'] = user_id
+    data = request.data
     serializer = CompanySerializer(data=data)
-
     if Company.objects.filter(Q(name=data['name']) | Q(email=data['email'])).exists():
         return Response({"error": "A company with this name or email already exists."}, status=status.HTTP_400_BAD_REQUEST)
-    
-
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -98,11 +82,17 @@ def create_company_form(request, user_id):
             'address': request.POST.get('address'),
         }
         response = requests.post('http://localhost:8000/companies/create/', json=company_data)
+        
         if response.status_code == 201:
-            return redirect('home')
+            company_id = response.json().get('id')
+            
+            if company_id:
+                return redirect('companies:company_dashboard', id=company_id)
+            else:
+                return redirect('home')
         else:
             try:
-                error_message = response.json().get('error', 'Error creating company')  # Extract the error message from the JSON response
+                error_message = response.json().get('error', 'Error creating company')  # Extraer el mensaje de error de la respuesta JSON
             except:
                 error_message = 'Error creating company'
 
@@ -112,15 +102,13 @@ def create_company_form(request, user_id):
 
     
 
-
-
 # VISTAS QUE LLAMAN A LA API Y DEVUELVEN HTMLS
 import requests
 from django.shortcuts import redirect, get_object_or_404
 from app_companies.models import Company
 from datetime import datetime
 
-
+@login_required(login_url='login')
 def company_dashboard(request, id):
     company = get_object_or_404(Company, id=id)
     
@@ -142,7 +130,7 @@ def company_dashboard(request, id):
     })
 
 
-
+@login_required(login_url='login')
 def update_company(request, id):
     api_url = f"http://127.0.0.1:8000/companies/{id}/detail/"
     response = requests.get(api_url)

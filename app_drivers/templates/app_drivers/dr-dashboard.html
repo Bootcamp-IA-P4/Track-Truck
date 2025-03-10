@@ -19,6 +19,10 @@
     <main>
         {% if driver %}
         <div class="cp-dashboard">
+            <form action="{% url 'logout' %}" method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">Logout</button>
+            </form>
             <div class="cp-data-shipments">
                 <div class="cp-data">
                     <h3>Welcome, {{ driver.name }}!</h3>

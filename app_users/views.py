@@ -61,8 +61,8 @@ def login_view(request):
             auth_login(request, user)
 
             if user.user_type == 'company':
-                company = user.company
-                return redirect('companies:company_dashboard', id=company.id)
+                company = user.companies.first()
+                return redirect('companies:company_dashboard', company.id)
             elif user.user_type == 'driver':
                 driver = user.driver
                 return redirect('drivers:driver_dashboard', id=driver.id)

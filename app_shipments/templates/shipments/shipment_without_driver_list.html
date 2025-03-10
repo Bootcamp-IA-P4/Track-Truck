@@ -48,11 +48,11 @@
                                 <td>{{ shipment.origin }}</td>
                                 <td>{{ shipment.destination }}</td>
                                 <td>{{ shipment.created_at }}</td>
-                                <td>
-                                    <a href="{% url 'shipments:assign_driver_to_shipment' shipment.id driver.id %}">
+                                {% comment %} <td>
+                                    <a href="{% url 'shipments:assign_driver_to_shipment' shipment.id %}">
                                         <button>Assign to me</button>
                                     </a>
-                                </td>
+                                </td> {% endcomment %}
                             </tr>
                         {% endfor %}
                     </tbody>

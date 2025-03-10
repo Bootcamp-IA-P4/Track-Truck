@@ -132,23 +132,23 @@ from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 
-from django.shortcuts import render
-from .models import Shipment
-
 def shipmentWithoutDriverPage(request):
     shipments = Shipment.objects.filter(driver_id__isnull=True)
-    
-    # Obtener el conductor autenticado
-    driver = request.user.driver if hasattr(request.user, 'driver') and request.user.driver else None
+
+    driver = None
+    if hasattr(request.user, 'driver') and request.user.driver:
+        driver = request.user.driver
 
     return render(request, 'shipments/shipment_without_driver_list.html', {
         'shipments': shipments,
-        'driver': driver  # Pasar el driver_id al contexto
+        'driver': driver
     })
 
 
 def assignDriverToShipment(request, id, driver_id):
     shipment = get_object_or_404(Shipment, id=id)
+    
     shipment.driver_id = driver_id
     shipment.save()
+    
     return HttpResponseRedirect(reverse('drivers:driver_dashboard', args=[driver_id]))

@@ -731,6 +731,8 @@ git commit -m "Añadir nueva funcionalidad"
    
 ---
 ## 📜 Licencia
+
 Este proyecto está bajo la licencia MIT. Puedes ver más detalles en el archivo LICENSE
+
 ---
 ## 🚀 ¡Gracias por usar Track-Truck! Si tienes preguntas, crea un issue en el repositorio o contáctanos.

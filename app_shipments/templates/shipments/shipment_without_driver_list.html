@@ -1,0 +1,66 @@
+{% load static %}  <!-- Cargar archivos estáticos -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ driver.name }}'s Dashboard</title>
+    
+    <link rel="icon" type="image/x-icon" href="{% static 'images/favicon.ico' %}">
+
+    <link rel="stylesheet" href="{% static 'css/dashboard_styles.css' %}">
+
+    <style>
+     .dashboard-for-assign {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+     }
+
+     h2 {
+        padding-bottom: 50px;
+     }
+    </style>
+</head>
+<body>
+
+    <div class="dashboard-for-assign">
+        {% block content %}
+            <h2>Shipments Without Driver</h2>
+            {% if shipments %}
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Description</th>
+                            <th>Origin</th>
+                            <th>Destination</th>
+                            <th>Created At</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for shipment in shipments %}
+                            <tr>
+                                <td>{{ shipment.id }}</td>
+                                <td>{{ shipment.description }}</td>
+                                <td>{{ shipment.origin }}</td>
+                                <td>{{ shipment.destination }}</td>
+                                <td>{{ shipment.created_at }}</td>
+                                {% comment %} <td>
+                                    <a href="{% url 'shipments:assign_driver_to_shipment' shipment.id %}">
+                                        <button>Assign to me</button>
+                                    </a>
+                                </td> {% endcomment %}
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p>No shipments available for assignment.</p>
+            {% endif %}
+        {% endblock %}
+    </div>
+
+</body>

@@ -1,51 +1,40 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Track Truck</title>
-    <style>
-        /* Estilos para la barra superior y la página */
-        body, html {
-            margin: 0;
-            padding: 0;
-            font-family: Arial, sans-serif;
-        }
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
 
-        #barraSuperior {
-            background-color: #4CAF50;
-            color: white;
-            text-align: center;
-            font-size: 24px;
-            padding: 10px;
-        }
+    <link rel="icon" type="image/x-icon" href="{% static 'images/favicon.ico' %}">
 
-        #contenido {
-            text-align: center;
-            margin-top: 50px;
-        }
-
-        button {
-            padding: 10px 20px;
-            font-size: 18px;
-            margin: 10px;
-            cursor: pointer;
-        }
-    </style>
 </head>
 <body>
 
-    <!-- Barra superior -->
-    <div id="barraSuperior">
-        Track Truck
-    </div>
+    <div class="container">
+        <div id="imagenContenedor">
+            <img src="{% static 'images/camion2.webp' %}" alt="Imagen de la izquierda">
+        </div>
 
-    <!-- Contenido principal con botones -->
-    <div id="contenido">
-        {% url 'login' as login_url %}
-        <button onclick="window.location.href='{{ login_url }}'">Login</button>
-        {% url 'signin' as signin_url %}
-        <button onclick="window.location.href='{{ signin_url }}'">Signin</button>
+        <div id="contenido">
+            <div class="logo-container">
+                <img src="{% static 'images/TT3.png' %}" alt="Imagen de la izquierda">
+            </div>
+
+            <h2>Welcome to Track Truck</h2>
+            <p>Please login or signin</p>
+
+        
+            <div class="button-container">
+                {% url 'login' as login_url %}
+                <button onclick="window.location.href='{{ login_url }}'">Login</button>
+
+                {% url 'signin' as signin_url %}
+                <button onclick="window.location.href='{{ signin_url }}'">Signin</button>
+            </div>
+        
+        </div>
     </div>
 
 </body>

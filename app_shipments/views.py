@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .serializer import ShipmentSerializer
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
@@ -94,16 +94,23 @@ def shipmentCreateDashboard(request):
         if 'finished_at' in data and data['finished_at'] == '':
             data.pop('finished_at')
 
+        company_id = data.get('company_id')
+
         serializer = ShipmentSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+            if company_id:
+                return redirect('companies:company_dashboard', id=company_id)
+            else:
+                return Response({"error": "No company ID provided"}, status=status.HTTP_400_BAD_REQUEST)
+
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     except Exception as e:
         return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
-    
+
 
 # VISTA API PARA SHIPMENTS SIN DRIVER_ID
 @api_view(['GET'])

@@ -36,16 +36,8 @@ class UserAPITestCase(TestCase):
         "password": "123"
     }
         response = self.client.post(reverse('signin'), data)
-
-        print("Response status:", response.status_code)
-        print("Response content:", response.content.decode())  # Ver HTML en consola
-
-    # Verificar que la respuesta sigue mostrando el formulario
-        self.assertEqual(response.status_code, 200)  # La página se recarga con errores
-        self.assertContains(response, "form")  # Comprobar que el formulario con errores sigue presente
-
-
-
+        self.assertEqual(response.status_code, 200)  
+        self.assertContains(response, "form")  
 
     def test_login_valid_user(self):
         """Prueba el login con credenciales válidas."""
@@ -60,20 +52,15 @@ class UserAPITestCase(TestCase):
         "username": "usuario_invalido",
         "password": "contraseña_incorrecta"
     }
-        response = self.client.post(reverse('login'), data)  # Sin content_type='application/json'
-    
-        print("Response status:", response.status_code)
-        print("Response content:", response.content.decode())  # Ver HTML en consola
-
-    # Como la vista devuelve un formulario HTML con errores, no devolverá 400
-        self.assertEqual(response.status_code, 200)  # Asegurar que la página se recarga
-        self.assertContains(response, "form")  # Verificar que el formulario sigue presente
+        response = self.client.post(reverse('login'), data)
+        self.assertEqual(response.status_code, 200)  
+        self.assertContains(response, "form")  
 
     def test_logout_user(self):
         """Prueba el cierre de sesión de un usuario autenticado."""
-        self.client.login(email=self.user_data['email'], password=self.user_data['password'])  # Usa login real
-        response = self.client.get(reverse('logout'))  # Llamar con GET en lugar de POST
-        self.assertEqual(response.status_code, status.HTTP_302_FOUND)  # Redirección a login
+        self.client.login(email=self.user_data['email'], password=self.user_data['password'])  
+        response = self.client.get(reverse('logout'))  
+        self.assertEqual(response.status_code, status.HTTP_302_FOUND)  
 
         
 

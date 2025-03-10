@@ -71,9 +71,10 @@ class UserAPITestCase(TestCase):
 
     def test_logout_user(self):
         """Prueba el cierre de sesión de un usuario autenticado."""
-        self.client.force_authenticate(user=self.user)
-        response = self.client.post(reverse('logout'))
+        self.client.login(email=self.user_data['email'], password=self.user_data['password'])  # Usa login real
+        response = self.client.get(reverse('logout'))  # Llamar con GET en lugar de POST
         self.assertEqual(response.status_code, status.HTTP_302_FOUND)  # Redirección a login
+
         
 
    

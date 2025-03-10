@@ -40,34 +40,42 @@ def signin(request):
 
 
 
+
+
 # def login_view(request):
 #     if request.method == 'POST':
 
 
-#             auth_login(request, user)
-#             return redirect('home')
-#     else:
-#         form = CustomUserCreationForm
-#     return render(request, 'users/signin.html', {'form': form})
+    #         auth_login(request, user)
+    #         return redirect('home')
+    # else:
+    #     form = CustomUserCreationForm
+    # return render(request, 'users/signin.html', {'form': form})
 
-# def login_view(request):
-#     if request.method == 'POST':
-#         form = CustomAuthenticationForm(request, data=request.POST)
-#         if form.is_valid():
-#             user = form.get_user()
-#             auth_login(request, user)
-#             return redirect('home')
-#     else:
-#         form = CustomAuthenticationForm()
-#     return render(request, 'users/login.html', {'form': form})
+
+def login_view(request):
+    if request.method == 'POST':
+        form = CustomAuthenticationForm(request, data=request.POST)
+        if form.is_valid():
+            user = form.get_user()
+            auth_login(request, user)
+
+            if user.user_type == 'company':
+                company = user.companies.first()
+                return redirect('companies:company_dashboard', company.id)
+            elif user.user_type == 'driver':
+                driver = user.driver
+                return redirect('drivers:driver_dashboard', id=driver.id)
+            else:
+                return redirect('home')
+    else:
+        form = CustomAuthenticationForm()
+
+    return render(request, 'users/login.html', {'form': form})
 
 def logout_view(request):
     auth_logout(request)
     return redirect('login')
-
-def login_view(request):
-     return render(request, 'users/login.html')
-
 
 def forgot_password(request):
     return render(request, 'forgot_password.html')

@@ -4,11 +4,16 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .serializers import CompanySerializer
 from rest_framework import status
+import logging
+from django.db.models import Q
+
+logger = logging.getLogger('app_companies')
 
 # Create your views here.
 
 @api_view(['GET'])
 def getAllCompanies(request):
+    logger.debug('Getting all companies')
     companies = Company.objects.all()
     serializer = CompanySerializer(companies, many=True)
     return Response(serializer.data)
@@ -23,6 +28,7 @@ def getAllCompanies(request):
 
 @api_view(['POST'])
 def createCompany(request):
+    logger.debug('Creating a company')
     data = request.data.copy()
     user_id = data.pop('user_id', None)
     
@@ -31,6 +37,11 @@ def createCompany(request):
     
     data['user_id'] = user_id
     serializer = CompanySerializer(data=data)
+
+    if Company.objects.filter(Q(name=data['name']) | Q(email=data['email'])).exists():
+        return Response({"error": "A company with this name or email already exists."}, status=status.HTTP_400_BAD_REQUEST)
+    
+
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -43,27 +54,36 @@ def companyDetail(request, id):
     try:
         company = Company.objects.get(pk=id)
     except Company.DoesNotExist:
+        logger.error(f'Company with id {id} not found')
         return Response(status=status.HTTP_404_NOT_FOUND)
     
     if request.method == 'GET':
+        logger.debug(f'Retrieving details of company with ID {id}')
         serializer = CompanySerializer(company)
         return Response(serializer.data)
     
     elif request.method == 'PUT':
+        logger.debug(f'Updating company with ID {id}')
         serializer = CompanySerializer(instance=company, data=request.data)
         if serializer.is_valid():
             serializer.save()
+            logger.info(f'Company with id {id} updated')
             return Response(serializer.data)
+        logger.warning(f'Error updating company with ID {id}: {serializer.errors}')
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
     elif request.method == 'PATCH':
+        logger.debug(f'Patching company with id {id}')
         serializer = CompanySerializer(instance=company, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
+            logger.info(f'Company with id {id} was patched')
             return Response(serializer.data)
+        logger.warning(f'Error patching company with id {id}: {serializer.errors}')
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
     elif request.method == 'DELETE':
+        logger.warning(f'Deleting company with id {id}')
         company.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
     
@@ -75,13 +95,18 @@ def create_company_form(request, user_id):
             'name': request.POST.get('name'),
             'email': request.POST.get('email'),
             'phone': request.POST.get('phone'),
+            'address': request.POST.get('address'),
         }
         response = requests.post('http://localhost:8000/companies/create/', json=company_data)
         if response.status_code == 201:
-            #return redirect('company_dashboard') ### Cambiar a la vista de detalle de la compañía !!!
-            return redirect('home') ### Cambiar a la vista de detalle de la compañía !!!
+            return redirect('home')
         else:
-            return render(request, 'create_company.html', {'error': 'Error al crear la compañía', 'user_id': user_id})
+            try:
+                error_message = response.json().get('error', 'Error creating company')  # Extract the error message from the JSON response
+            except:
+                error_message = 'Error creating company'
+
+            return render(request, 'create_company.html', {'error': error_message, 'user_id': user_id})
     else:
         return render(request, 'create_company.html', {'user_id': user_id})
 

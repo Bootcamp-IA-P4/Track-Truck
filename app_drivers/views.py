@@ -7,6 +7,7 @@ from .serializers import DriverSerializer
 import requests
 from datetime import datetime
 import json
+from django.db.models import Q
 
 # Obtener todos los conductores
 @api_view(['GET'])
@@ -19,6 +20,8 @@ def get_all_drivers(request):
 @api_view(['POST'])
 def create_driver(request):
     serializer = DriverSerializer(data=request.data)
+    if Driver.objects.filter(truck_plate=request.data.get('truck_plate')).exists():
+        return Response({"error": "A driver with this truck plate already exists."}, status=status.HTTP_400_BAD_REQUEST)
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -44,6 +47,26 @@ def driver_detail(request, id):
         driver.delete()
         return Response({"message": "Conductor eliminado correctamente"}, status=status.HTTP_204_NO_CONTENT)
 
+def create_driver_form(request, user_id):
+    if request.method == 'POST':
+        driver_data = {
+            'user': user_id,
+            'name': request.POST.get('name'),
+            'truck_plate': request.POST.get('truck_plate'),
+            'phone': request.POST.get('phone')
+        }
+        response = requests.post('http://localhost:8000/drivers/create/', json=driver_data)
+        if response.status_code == 201:
+            return redirect('home')  # Redirect on success
+        else:
+            try:
+                error_message = response.json().get('error', 'Error creating driver')  # Extract error from API response
+            except:
+                error_message = 'Error creating driver'  # Generic error if JSON parsing fails
+            
+            return render(request, 'app_drivers/create_driver.html', {'error': error_message, 'user_id': user_id})
+    else:
+        return render(request, 'app_drivers/create_driver.html', {'user_id': user_id})
 
 # VISTAS QUE LLAMAN A LA API Y DEVUELVEN HTMLS
 

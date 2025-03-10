@@ -1,4 +1,4 @@
-{% load static %}  <!-- Cargar archivos estáticos -->
+{% load static %}
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -6,7 +6,68 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ company.name }}'s Dashboard</title>
 
-    <link rel="stylesheet" href="{% static 'css/dashboard_styles.css' %}">
+    <link rel="icon" type="image/x-icon" href="{% static 'images/favicon.ico' %}">
+
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="{% static 'css/dashboard_styles.css' %}?v=5">
+
+    <style>
+        .cp-create-shipments {
+            width: 100%;
+            max-width: 450px;
+            background: #fbdc8c;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 7px 13px 37px #fdeec8;
+            margin: 0 auto; /* Centrado */
+        }
+
+        .cp-create-shipments h2 {
+            text-align: center;
+            font-size: 24px;
+            margin-bottom: 30px;
+            border-bottom: 1px solid black;
+        }
+
+        .form-control {
+            background-color: #fdeec8;
+            border: 1px solid #fdeec8;
+            font-size: 14px;
+        }
+
+        button[type="submit"] {
+            width: 100%;
+            background: #762d11;
+            border: none;
+            color: white;
+            height: 40px;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+
+        button[type="submit"]:hover {
+            background: blue;
+        }
+
+        .cancel-btn {
+            display: inline-block;
+            margin-top: 20px;
+            color: #fff;
+            text-decoration: none;
+            background-color: #903610;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-align: center;
+            width: 100%;
+        }
+
+        .cancel-btn:hover {
+            background-color: red;
+            color: white;
+            text-decoration: none;
+        }
+    </style>
 </head>
 <body>
 
@@ -25,7 +86,7 @@
                     <p><strong>Phone:</strong> {{ company.phone }}</p>
                     <p><strong>Address:</strong> {{ company.address|default:"No disponible" }}</p>
 
-                    <a href="{% url 'update_company' company.id %}">
+                    <a href="{% url 'companies:update_company' company.id %}">
                         <button>Update</button>
                     </a>
                 </div>
@@ -46,7 +107,7 @@
                                     <th>Destination</th>
                                     <th>Created At</th>
                                     <th>Driver</th>
-                                    <th>Finished At</th>
+                                    <th>Limit date</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -58,10 +119,15 @@
                                     <td>{{ shipment.destination }}</td>
                                     <td>{{ shipment.created_at }}</td>
                                     <td class="td-color">
-                                        <a href="{% url 'company_dashboard' shipment.driver_id %}" class="driver-link">
-                                            {{ shipment.driver_id }}
-                                        </a>
+                                        {% if shipment.driver_id %}
+                                            <a href="{% url 'drivers:driver_dashboard' shipment.driver_id %}" class="driver-link">
+                                                {{ shipment.driver_id }}
+                                            </a>
+                                        {% else %}
+                                            Not Assigned
+                                        {% endif %}
                                     </td>
+
                                     <td>{{ shipment.finished_at }}</td>
                                 </tr>
                                 {% endfor %}
@@ -75,11 +141,42 @@
                 </div>
             </div>
 
-            <div class="cp-create-shipment">
-                <h3>Create shipment</h3>
-                <div class="cp-create-shipments">
-                    
-                </div>
+            <div class="cp-create-shipments">
+                <h2>Create Shipment</h2>
+
+                <form method="POST" action="{% url 'shipments:create_shipment_dashboard' %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="company_id" value="{{ company.id }}">
+
+                    <div class="form-group mb-3">
+                        <label for="id_description">Description:</label>
+                        <textarea name="description" id="id_description" class="form-control" required></textarea>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="id_origin">Origin:</label>
+                        <input type="text" name="origin" id="id_origin" class="form-control" required>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="id_destination">Destination:</label>
+                        <input type="text" name="destination" id="id_destination" class="form-control" required>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="id_created_at">Created At:</label>
+                        <input type="datetime-local" name="created_at" id="id_created_at" class="form-control" required>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="id_finished_at">Limit date:</label>
+                        <input type="datetime-local" name="finished_at" id="id_finished_at" class="form-control">
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Create Shipment</button>
+                </form>
+
+                <a href="{% url 'companies:company_dashboard' id=company.id %}" class="cancel-btn">Clear</a>
             </div>
         </div>
         {% else %}

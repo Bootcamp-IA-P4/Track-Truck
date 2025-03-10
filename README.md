@@ -20,7 +20,6 @@
       </ul>
     </li>
      <li><a href="#Contribución">Contribución</a></li>
-    <li><a href="#Licencia">Licencia</a></li>
   </ol>
 </details>
 
@@ -533,13 +532,11 @@ Endpoint: POST /shipments/create/
 Parámetros requeridos (JSON):
 ```json
 {
-    "company_id": 1,
-    "driver_id": 2,
-    "status": "pending",
-    "created_at": "2025-03-10T12:00:00Z",
-    "finished_at": "2025-03-11T18:00:00Z",
-    "origin": "Ciudad A",
-    "destination": "Ciudad B"
+   "company_id": 1,
+    "driver_id": null,
+    "origin": "Madrid",
+    "destination": "Barcelona",
+    "status": "pending"
 }
 ```
 
@@ -548,12 +545,11 @@ Ejemplo de respuesta (`200 OK`). ✔️
 {
     "id": 10,
     "company_id": 1,
-    "driver_id": 2,
+    "driver_id": null,
+    "origin": "Madrid",
+    "destination": "Barcelona",
     "status": "pending",
-    "created_at": "2025-03-10T12:00:00Z",
-    "finished_at": "2025-03-11T18:00:00Z",
-    "origin": "Ciudad A",
-    "destination": "Ciudad B"
+    "created_at": "2024-06-01T12:00:00Z"
 }
 ```
 
@@ -562,8 +558,8 @@ Posibles errores:
 
 ---
 
-### Listar todos los envíos
-Devuelve un listado con todos los envíos registrados.
+### Obtener la lista de envíos
+Devuelve una lista de todos los envíos.
 
 Endpoint: GET /shipments/list/
 
@@ -571,24 +567,20 @@ Ejemplo de respuesta (`200 OK`). ✔️
 ```json
 [
     {
-        "id": 10,
-        "company_id": 1,
-        "driver_id": 2,
-        "status": "pending",
-        "created_at": "2025-03-10T12:00:00Z",
-        "finished_at": "2025-03-11T18:00:00Z",
-        "origin": "Ciudad A",
-        "destination": "Ciudad B"
+        "id": 1,
+        "company_id": 2,
+        "driver_id": 5,
+        "origin": "Sevilla",
+        "destination": "Valencia",
+        "status": "in_progress"
     },
     {
-        "id": 11,
-        "company_id": 2,
-        "driver_id": 3,
-        "status": "in_progress",
-        "created_at": "2025-03-09T15:00:00Z",
-        "finished_at": null,
-        "origin": "Ciudad C",
-        "destination": "Ciudad D"
+        "id": 2,
+        "company_id": 3,
+        "driver_id": null,
+        "origin": "Madrid",
+        "destination": "Bilbao",
+        "status": "pending"
     }
 ]
 ```
@@ -596,10 +588,10 @@ Posibles errores: `400 Bad Request` en caso de fallo inesperado en la consulta. 
 
 ---
 
-### Listar envíos por empresa
-Obtiene todos los envíos asociados a una empresa específica.
+### Obtener envíos de una empresa
+Devuelve los envíos pertenecientes a una empresa específica.
 
-Endpoint: GET <int:id>/co-shipments/
+Endpoint: GET /shipments/company/{id}/
 
 Parámetros de la URL:
 
@@ -609,14 +601,12 @@ Ejemplo de respuesta (200 OK). ✔️
 ```json
 [
     {
-        "id": 10,
-        "company_id": 1,
-        "driver_id": 2,
-        "status": "pending",
-        "created_at": "2025-03-10T12:00:00Z",
-        "finished_at": "2025-03-11T18:00:00Z",
-        "origin": "Ciudad A",
-        "destination": "Ciudad B"
+        "id": 5,
+        "company_id": 3,
+        "driver_id": 7,
+        "origin": "Barcelona",
+        "destination": "Madrid",
+        "status": "completed"
     }
 ]
 ```
@@ -627,10 +617,10 @@ Posibles errores: ❌
 * `400 Bad Request` en caso de error interno.
 ---
 
-### Listar envíos por conductor
-Obtiene todos los envíos asignados a un conductor específico.
+### Obtener envíos asignados a un conductor
+Devuelve los envíos asignados a un conductor.
 
-Endpoint: GET <int:id>/dr-shipments/
+Endpoint: GET /shipments/driver/{id}/
 
 Parámetros de la URL:
 
@@ -640,14 +630,12 @@ Ejemplo de respuesta (`200 OK`). ✔️
 ```json
 [
     {
-        "id": 11,
-        "company_id": 2,
-        "driver_id": 3,
-        "status": "in_progress",
-        "created_at": "2025-03-09T15:00:00Z",
-        "finished_at": null,
-        "origin": "Ciudad C",
-        "destination": "Ciudad D"
+        "id": 6,
+        "company_id": 1,
+        "driver_id": 2,
+        "origin": "Zaragoza",
+        "destination": "Málaga",
+        "status": "in_progress"
     }
 ]
 ```
@@ -691,10 +679,68 @@ Posibles errores: `400 Bad Request` si los datos son inválidos o falta el ID de
 
 ---
 
-### Eliminar un envío
-Elimina un envío existente de la base de datos.
+### Obtener envíos sin conductor asignado
+Devuelve los envíos que aún no tienen un conductor asignado.
 
-Endpoint: DELETE /shipments/delete/
+Endpoint: GET /shipments/without-driver/
+
+Ejemplo de respuesta (`200 ok`) ✔️
+```json
+[
+    {
+        "id": 3,
+        "company_id": 4,
+        "driver_id": null,
+        "origin": "Valencia",
+        "destination": "Madrid",
+        "status": "pending"
+    }
+]
+```
+---
+
+### Asignar un conductor a un envío
+Permite a un conductor tomar un envío disponible.
+
+Endpoint: POST /shipments/assign-driver/{shipment_id}/
+
+Ejemplo de respuesta:
+```json
+{
+    "message": "Driver assigned successfully"
+}
+```
+
+### Actualizar un envío
+Actualiza los detalles de un envío.
+
+Endpoint: PUT /shipments/update/
+
+Ejemplo de solicitud:
+```json
+{
+    "id": 3,
+    "status": "completed"
+}
+```
+
+Ejemplo de respuesta:
+```json
+{
+    "id": 3,
+    "company_id": 4,
+    "driver_id": 2,
+    "origin": "Valencia",
+    "destination": "Madrid",
+    "status": "completed"
+}
+```
+---
+
+### Eliminar un envío
+Elimina un envío si aún no tiene un conductor asignado.
+
+Endpoint: DELETE /shipments/delete/{id}/
 
 Ejemplo de respuesta (`200 OK`)
 ```json
@@ -733,10 +779,5 @@ git commit -m "Añadir nueva funcionalidad"
 
 4. Envía un pull request 🚀.
    
----
-## 📜 Licencia
-
-Este proyecto está bajo la licencia MIT. Puedes ver más detalles en el archivo LICENSE
-
 ---
 ## 🚀 ¡Gracias por usar Track-Truck! Si tienes preguntas, crea un issue en el repositorio o contáctanos.

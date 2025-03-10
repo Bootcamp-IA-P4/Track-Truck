@@ -18,6 +18,6 @@ urlpatterns = [
     path('shp-without-dr/', views.shipmentWithoutDriverPage, name='shipment_without_dr_page'),
 
     # Ruta para asignar un shipment a un conductor
-    path('<int:id>/assign-driver/<int:driver_id>/', views.assignDriverToShipment, name='assign_driver_to_shipment'),
+    path('<int:shipment_id>/assign-driver/', views.assign_driver_to_shipment, name='assign_driver_to_shipment'),
 
 ]

@@ -42,7 +42,7 @@ Permite a las empresas publicar rutas y a los conductores encontrar oportunidade
 
 - **Backend:** Django REST Framework (DRF) + Python  
 - **Base de Datos:** PostgreSQL  
-- **Frontend:** HTML + CSS  
+- **Frontend:** HTML + CSS + Bootstrap 
 - **Entorno Virtual:** `.env` para configuración segura  
 
 ---
@@ -143,7 +143,7 @@ Endpoint: POST /api/auth/login/
 Parámetros requeridos (Formulario o JSON):
 ```json
 {
-    "username": "usuario123",
+    "email": "usuario123@user.com",
     "password": "ContraseñaSegura123"
 }
 ```
@@ -336,7 +336,7 @@ Posibles errores:
 
 ## Vistas HTML (Interfaz Web)
 1. Crear una empresa desde formulario
-URL: [/companies/create/form/{user_id}/](/companies/create/form/{user_id}/)
+URL: [create_companies_form/<int:user_id>/](create_companies_form/<int:user_id>/)
 Muestra un formulario para registrar una empresa.
 
 * Si la empresa se crea correctamente, redirige a home.
@@ -486,7 +486,7 @@ Posibles errores `404 Not Found` si el conductor no existe. ❌
 
 ### Vistas HTML (Interfaz Web)
 1. Crear un conductor desde formulario
-URL: [/drivers/create/form/{user_id}/](/drivers/create/form/{user_id}/)
+URL: [create_driver_form/<int:user_id>/](create_driver_form/<int:user_id>/)
 Muestra un formulario para registrar un conductor.
 
 * Si el conductor se crea correctamente, redirige a home.
@@ -587,7 +587,7 @@ Posibles errores: `400 Bad Request` en caso de fallo inesperado en la consulta. 
 ### Listar envíos por empresa
 Obtiene todos los envíos asociados a una empresa específica.
 
-Endpoint: GET /shipments/{company_id}/company-shipments/
+Endpoint: GET <int:id>/co-shipments/
 
 Parámetros de la URL:
 
@@ -618,7 +618,7 @@ Posibles errores: ❌
 ### Listar envíos por conductor
 Obtiene todos los envíos asignados a un conductor específico.
 
-Endpoint: GET /shipments/{driver_id}/driver-shipments/
+Endpoint: GET <int:id>/dr-shipments/
 
 Parámetros de la URL:
 

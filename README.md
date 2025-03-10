@@ -172,14 +172,6 @@ Ejemplo de respuesta (`302 Redirect`)
 (Redirige a [/users/login/](/users/login/))
 
 ---
-### Recuperación de contraseña
-Muestra la página de recuperación de contraseña.
-
-Endpoint: GET /users/forgot-password/
-
-Ejemplo de respuesta (200 OK) ✔️
-(Renderiza la vista [forgot_password.html](forgot_password.html))
-
 
 > [!NOTE]
 >

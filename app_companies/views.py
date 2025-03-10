@@ -9,8 +9,6 @@ from django.db.models import Q
 
 logger = logging.getLogger('app_companies')
 
-# Create your views here.
-
 @api_view(['GET'])
 def getAllCompanies(request):
     logger.debug('Getting all companies')
@@ -18,29 +16,18 @@ def getAllCompanies(request):
     serializer = CompanySerializer(companies, many=True)
     return Response(serializer.data)
 
-# @api_view(['POST'])
-# def createCompany(request):
-#     serializer = CompanySerializer(data=request.data)
-#     if serializer.is_valid():
-#         serializer.save()
-#         return Response(serializer.data, status=status.HTTP_201_CREATED)
-#     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['POST'])
 def createCompany(request):
     logger.debug('Creating a company')
-    # data = request.data.copy()
-    # user_id = data.pop('user_id', None)
-    
-    # if user_id is None:
-    #     return Response({"error": "user_id is required"}, status=status.HTTP_400_BAD_REQUEST)
-    
-    # data['user_id'] = user_id
-    # serializer = CompanySerializer(data=data)
     data = request.data
     serializer = CompanySerializer(data=data)
     if Company.objects.filter(Q(name=data['name']) | Q(email=data['email'])).exists():
         return Response({"error": "A company with this name or email already exists."}, status=status.HTTP_400_BAD_REQUEST)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 

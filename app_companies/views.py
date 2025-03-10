@@ -102,8 +102,6 @@ def create_company_form(request, user_id):
 
     
 
-
-
 # VISTAS QUE LLAMAN A LA API Y DEVUELVEN HTMLS
 import requests
 from django.shortcuts import redirect, get_object_or_404

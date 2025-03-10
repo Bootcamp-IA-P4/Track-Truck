@@ -10,17 +10,6 @@ from django.contrib import messages
 from django.core.exceptions import PermissionDenied
 from django.contrib.auth.decorators import login_required
 
-
-# def custom_permission_denied_view(request, exception):
-#     return render(request, '403.html', status=403)
-
-# def is_admin(user):
-#     if not user.is_authenticated or not user.is_superuser:
-#         raise PermissionDenied("Page reserved for admin.")
-#     return True
-
-
-# @user_passes_test(is_admin, login_url='login')
 from django.contrib.auth import login as auth_login
 from django.shortcuts import redirect
 from .forms import CustomUserCreationForm
@@ -40,19 +29,6 @@ def signin(request):
         form = CustomUserCreationForm()
     return render(request, 'users/signin.html', {'form': form})
 
-
-
-
-
-# # def login_view(request):
-# #     if request.method == 'POST':
-
-
-#             auth_login(request, user)
-#             return redirect('home')
-#     else:
-#         form = CustomUserCreationForm
-#     return render(request, 'users/signin.html', {'form': form})
 
 def login_view(request):
     if request.method == 'POST':

@@ -3,7 +3,6 @@ from .import views
 
 app_name = 'companies'
 
-
 urlpatterns = [     
     # API REST
     path('', views.getAllCompanies,name='list_companies'),

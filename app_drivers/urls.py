@@ -1,5 +1,6 @@
 from django.urls import path
 from .import views
+from app_shipments import views as shipments_views
 
 app_name = 'drivers'
 urlpatterns = [
@@ -13,4 +14,5 @@ urlpatterns = [
     # VISTAS HTML
     path('<int:id>/dr-dashboard/', views.driver_dashboard, name='driver_dashboard'),
     path('<int:id>/dr-update/', views.update_driver, name='update_driver'),
+
 ]

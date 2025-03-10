@@ -1,13 +1,91 @@
-<form method="post">
-    {% csrf_token %}
-    <input type="hidden" name="user_id" value="{{ user_id }}">
-    <input type="text" name="name" placeholder="Nombre de la compañía" required>
-    <input type="email" name="email" placeholder="Email de la compañía" required>
-    <input type="tel" name="phone" placeholder="Teléfono de la compañía" required>
-    <input type="text" name="address" placeholder="Dirección de la compañía" required> 
-    <button type="submit">Crear Compañía</button>
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create company</title>
 
-    {% if error %}
-    <p style="color: red;">{{ error }}</p>
-    {% endif %}
-</form>
+    <link rel="icon" type="image/x-icon" href="{% static 'images/favicon.ico' %}">
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            background-color: #fff9eb;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .company-container {
+            font-family: 'Tahoma', sans-serif;
+            font-size: 1.1rem;
+            width: 100%;
+            max-width: 400px;
+            background: #fbdc8c;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+        .btn-primary {
+            width: 100%;
+            background-color: #903610;
+            border: #903610;
+        }
+        .form-error {
+            color: red;
+            font-size: 0.9rem;
+        }
+        .form-control {
+            background-color: #fff9eb;
+            border: #fff9eb;
+        }
+        .text-center {
+            margin-bottom: 20px;
+        }
+        input::placeholder {
+            color: #903610;
+        }
+    </style>
+</head>
+<body>
+
+<div class="company-container">
+    <h2 class="text-center">Finish creating company account</h2>
+
+    <form method="post">
+        {% csrf_token %}
+        <input type="hidden" name="user_id" value="{{ user_id }}">
+
+        <div class="mb-3">
+            <label for="name" class="form-label">Company name</label>
+            <input type="text" id="name" name="name" class="form-control" placeholder="Enter your company name" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="email" class="form-label">Company email</label>
+            <input type="email" id="email" name="email" class="form-control" placeholder="Enter your email" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="phone" class="form-label">Company phone</label>
+            <input type="tel" id="phone" name="phone" class="form-control" placeholder="Enter company phone" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="address" class="form-label">Company adress</label>
+            <input type="text" id="address" name="address" class="form-control" placeholder="Enter company adress" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Finish settings</button>
+
+        {% if error %}
+            <p class="form-error text-center mt-2">{{ error }}</p>
+        {% endif %}
+    </form>
+</div>
+
+</body>
+</html>

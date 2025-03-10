@@ -16,7 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from .views import home, re_path
+from .views import home
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 

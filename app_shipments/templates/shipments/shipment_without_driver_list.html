@@ -11,16 +11,32 @@
     <link rel="stylesheet" href="{% static 'css/dashboard_styles.css' %}">
 
     <style>
-     .dashboard-for-assign {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-direction: column;
-     }
+        .dashboard-for-assign {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
 
-     h2 {
-        padding-bottom: 50px;
-     }
+        h2 {
+            padding-bottom: 50px;
+        }
+
+        .button-assign {
+            padding: 5px;
+            margin: 0;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 80%;
+        }
+
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
     </style>
 </head>
 <body>
@@ -36,7 +52,7 @@
                             <th>Description</th>
                             <th>Origin</th>
                             <th>Destination</th>
-                            <th>Created At</th>
+                            <th>Due date</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -51,7 +67,7 @@
                                 <td>
                                 {% if driver %}
                                     <a href="{% url 'shipments:assign_driver_to_shipment' shipment.id %}">
-                                        <button>Assign to me</button>
+                                        <button class="button-assign">Assign to me</button>
                                     </a>
                                 {% else %}
                                     <p>You are not a driver, please log in as a driver to assign shipments.</p>
